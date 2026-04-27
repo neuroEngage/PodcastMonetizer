@@ -2,8 +2,9 @@ services:
   - type: web
     name: podmonetize-backend
     env: python
-    buildCommand: "cd backend && pip install -r requirements.txt"
-    startCommand: "cd backend && uvicorn server:app --host 0.0.0.0 --port $PORT"
+    rootDir: podcast-monetization/backend
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn server:app --host 0.0.0.0 --port $PORT"
     envVars:
       - key: ANTHROPIC_API_KEY
         sync: false # User needs to enter this in Render dashboard
