@@ -1,0 +1,8 @@
+[build]
+  publish = "frontend/public"
+  command = "echo 'No build step required for plain HTML/JS'"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

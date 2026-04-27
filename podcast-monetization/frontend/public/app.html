@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PodMonetize AI — Sponsorship Intelligence Platform</title>
+  <meta name="description" content="AI-powered podcast monetization: sponsor matching, pitch generation, and revenue intelligence powered by Claude." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ── Sidebar ─────────────────────────────────────────────────────────── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <span class="logo-icon">🎙</span>
+      <div>
+        <div class="logo-name">PodMonetize</div>
+        <div class="logo-sub">AI Sponsorship Engine</div>
+      </div>
+    </div>
+    <div class="podcast-switcher" id="podcast-name-display">My Podcast</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="nav-link active" id="nav-dashboard" onclick="showScreen('dashboard')">
+      <span class="nav-icon">📊</span> Dashboard
+    </a>
+    <a class="nav-link" id="nav-sponsors" onclick="showScreen('sponsors')">
+      <span class="nav-icon">🎯</span> Sponsor Finder
+    </a>
+    <a class="nav-link" id="nav-pitch" onclick="showScreen('pitch')">
+      <span class="nav-icon">✉️</span> Pitch Builder
+    </a>
+    <a class="nav-link" id="nav-placement" onclick="showScreen('placement')">
+      <span class="nav-icon">📍</span> Ad Placement
+    </a>
+    <a class="nav-link" id="nav-pricing" onclick="showScreen('pricing')">
+      <span class="nav-icon">💰</span> Pricing Tool
+    </a>
+    <div class="nav-divider"></div>
+    <a class="nav-link" id="nav-setup" onclick="showScreen('setup')">
+      <span class="nav-icon">⚙️</span> Setup
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="usage-row" id="usage-row" style="display:none">
+      <div class="usage-label">AI Spend (Session)</div>
+      <div class="usage-val" id="sidebar-cost">$0.00</div>
+      <div class="usage-label"><span id="sidebar-calls">0</span> calls · claude-sonnet-4</div>
+    </div>
+    <div class="plan-badge">🟢 Starter Plan</div>
+  </div>
+</aside>
+
+<!-- ── Main ──────────────────────────────────────────────────────────────── -->
+<main class="main" id="main">
+
+  <!-- ══ SCREEN: Dashboard ══════════════════════════════════════════════════ -->
+  <div class="screen active" id="screen-dashboard">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-sub">Your monetization overview — updated in real time.</p>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <button class="btn-ghost" onclick="exportPDF()" id="btn-export-pdf" style="display:none">📥 Export PDF</button>
+        <button class="btn-accent" onclick="showScreen('setup')">+ New Analysis</button>
+      </div>
+    </div>
+
+    <!-- KPI Strip -->
+    <div class="kpi-strip">
+      <div class="kpi-card">
+        <div class="kpi-label">Est. Revenue (MTD)</div>
+        <div class="kpi-val accent" id="kpi-revenue">$—</div>
+        <div class="kpi-delta" id="kpi-revenue-delta">—</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Matched Sponsors</div>
+        <div class="kpi-val" id="kpi-sponsors">—</div>
+        <div class="kpi-delta" id="kpi-sponsors-delta">from last analysis</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg CPM</div>
+        <div class="kpi-val" id="kpi-cpm">$—</div>
+        <div class="kpi-delta success" id="kpi-cpm-delta">Above niche avg</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Open Pitches</div>
+        <div class="kpi-val" id="kpi-pitches">—</div>
+        <div class="kpi-delta highlight" id="kpi-pitches-delta">Ready to send</div>
+      </div>
+    </div>
+
+    <!-- Two cols: AI Actions + Pipeline -->
+    <div class="dash-two-col">
+      <div class="surface-card" id="ai-actions-card">
+        <div class="card-title">⚡ AI Actions</div>
+        <div id="ai-actions-body" class="empty-state">
+          <div class="empty-icon">🎙</div>
+          <div class="empty-text">No analysis yet.</div>
+          <div class="empty-sub">Go to <strong>Setup</strong> to analyze your first episode.</div>
+          <button class="btn-ghost" onclick="showScreen('setup')">Get Started →</button>
+        </div>
+      </div>
+
+      <div class="surface-card" id="pipeline-card">
+        <div class="card-title">🤝 Sponsor Pipeline</div>
+        <div id="pipeline-body" class="empty-state">
+          <div class="empty-icon">📭</div>
+          <div class="empty-text">No sponsors matched yet.</div>
+          <div class="empty-sub">Run the AI pipeline to see matched sponsors.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Revenue chart area -->
+    <div class="surface-card">
+      <div class="card-title">📈 Revenue Projection</div>
+      <div id="revenue-chart-area" class="chart-placeholder">
+        <div class="chart-bars" id="chart-bars"></div>
+        <div id="chart-empty" class="empty-state" style="padding:32px 0">
+          <div class="empty-icon">📈</div>
+          <div class="empty-text">Revenue chart loads after analysis.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN: Setup ══════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-setup">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Setup</h1>
+        <p class="page-sub">Configure your podcast profile and run the AI analysis pipeline.</p>
+      </div>
+    </div>
+
+    <div class="setup-grid">
+      <!-- Profile card -->
+      <div class="surface-card">
+        <div class="card-title">📻 Podcast Profile</div>
+        <div class="form-row">
+          <div class="field">
+            <label class="field-label">Podcast Name</label>
+            <input class="input" id="f-name" type="text" placeholder="The Business Breakdown" />
+          </div>
+          <div class="field">
+            <label class="field-label">Category</label>
+            <select class="input" id="f-cat">
+              <option>Business</option><option>Finance</option><option>Technology</option>
+              <option>Education</option><option>Health &amp; Wellness</option>
+              <option>True Crime</option><option>Comedy</option><option>News</option>
+              <option>Sports</option><option>Science</option><option>Society &amp; Culture</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label class="field-label">Avg Listeners / Episode</label>
+            <input class="input" id="f-listeners" type="number" placeholder="18000" />
+          </div>
+          <div class="field">
+            <label class="field-label">Episodes / Month</label>
+            <input class="input" id="f-eps" type="number" placeholder="4" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label class="field-label">Age 18–34 %</label>
+            <input class="input" id="f-age1" type="number" placeholder="38" />
+          </div>
+          <div class="field">
+            <label class="field-label">Age 35–54 %</label>
+            <input class="input" id="f-age2" type="number" placeholder="48" />
+          </div>
+          <div class="field">
+            <label class="field-label">Gender Split</label>
+            <input class="input" id="f-gender" type="text" placeholder="58% M, 42% F" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label class="field-label">Current Monthly Revenue ($)</label>
+            <input class="input" id="f-rev" type="number" placeholder="800" />
+          </div>
+          <div class="field">
+            <label class="field-label">Top Geography</label>
+            <input class="input" id="f-geo" type="text" placeholder="US" />
+          </div>
+        </div>
+        <div class="quick-fill">
+          <button class="btn-ghost small" onclick="loadSample()">🎲 Load Sample Show</button>
+        </div>
+      </div>
+
+      <!-- Transcript card -->
+      <div class="surface-card">
+        <div class="card-title-row">
+          <div class="card-title">📝 Episode Transcript</div>
+          <div class="row-right">
+            <span class="mono-badge" id="wc-badge">0 words</span>
+            <button class="btn-ghost small" onclick="loadSampleTx()">Load Sample</button>
+          </div>
+        </div>
+
+        <!-- URL fetch row -->
+        <div class="url-fetch-row">
+          <div class="url-fetch-icon">🔗</div>
+          <input
+            class="input url-input"
+            id="f-url"
+            type="url"
+            placeholder="Paste a YouTube link — https://youtu.be/... or https://youtube.com/watch?v=..."
+          />
+          <button class="btn-fetch" id="fetch-btn" onclick="fetchTranscript()">
+            <span id="fetch-btn-text">Fetch Transcript</span>
+          </button>
+        </div>
+        <div class="url-hint">Or paste the transcript manually below ↓</div>
+        <div id="fetch-status" class="fetch-status" style="display:none"></div>
+
+        <textarea class="tx-area" id="f-tx" placeholder="Paste your episode transcript here..."></textarea>
+      </div>
+    </div>
+
+    <!-- Pipeline button -->
+    <div class="run-pipeline-row">
+      <div class="pipeline-info">
+        <div class="pipeline-info-title">5-Stage AI Pipeline</div>
+        <div class="pipeline-info-stages">
+          <span class="stage-pill">📝 Transcript</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-pill">👥 Audience</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-pill">🤝 Sponsors</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-pill">💰 Pricing</span>
+          <span class="stage-arrow">→</span>
+          <span class="stage-pill">✉️ Pitch</span>
+        </div>
+      </div>
+      <button class="btn-accent large" id="run-btn" onclick="runPipeline()">
+        ⚡ Run AI Analysis
+      </button>
+    </div>
+
+    <!-- Pipeline progress -->
+    <div id="pipeline-progress" style="display:none">
+      <div class="surface-card">
+        <div class="card-title">Pipeline Progress</div>
+        <div class="stages-row">
+          <div class="stage-box" id="stg-1">
+            <div class="stg-icon">📝</div>
+            <div class="stg-name">Transcript</div>
+            <div class="stg-status">—</div>
+          </div>
+          <div class="stage-connector"></div>
+          <div class="stage-box" id="stg-2">
+            <div class="stg-icon">👥</div>
+            <div class="stg-name">Audience</div>
+            <div class="stg-status">—</div>
+          </div>
+          <div class="stage-connector"></div>
+          <div class="stage-box" id="stg-3">
+            <div class="stg-icon">🤝</div>
+            <div class="stg-name">Sponsors</div>
+            <div class="stg-status">—</div>
+          </div>
+          <div class="stage-connector"></div>
+          <div class="stage-box" id="stg-4">
+            <div class="stg-icon">💰</div>
+            <div class="stg-name">Pricing</div>
+            <div class="stg-status">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div id="setup-error" class="error-banner" style="display:none">
+      <span class="error-icon">⚠</span>
+      <span id="setup-error-msg">Error.</span>
+      <button class="btn-ghost small" onclick="document.getElementById('setup-error').style.display='none'">✕</button>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN: Sponsor Finder ════════════════════════════════════════════ -->
+  <div class="screen" id="screen-sponsors">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Sponsor Finder</h1>
+        <p class="page-sub">AI-matched sponsors ranked by audience fit. Click any card to generate a pitch.</p>
+      </div>
+      <div class="header-kpis">
+        <div class="header-kpi">
+          <span class="header-kpi-val accent" id="sp-total">—</span>
+          <span class="header-kpi-label">matches</span>
+        </div>
+        <div class="header-kpi">
+          <span class="header-kpi-val" id="sp-cpm">$—</span>
+          <span class="header-kpi-label">avg CPM</span>
+        </div>
+        <div class="header-kpi">
+          <span class="header-kpi-val success" id="sp-pot">$—</span>
+          <span class="header-kpi-label">/ month potential</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audience intel strip -->
+    <div class="intel-strip" id="intel-strip" style="display:none">
+      <div class="intel-item">
+        <div class="intel-label">Audience Persona</div>
+        <div class="intel-val" id="intel-persona">—</div>
+      </div>
+      <div class="intel-item">
+        <div class="intel-label">Purchase Intent</div>
+        <div class="intel-tags" id="intel-intent"></div>
+      </div>
+      <div class="intel-item">
+        <div class="intel-label">Ideal Verticals</div>
+        <div class="intel-tags" id="intel-verticals"></div>
+      </div>
+    </div>
+
+    <div id="sponsors-empty" class="surface-card empty-state" style="padding:60px">
+      <div class="empty-icon">🎯</div>
+      <div class="empty-text">No sponsors matched yet.</div>
+      <div class="empty-sub">Run the AI Analysis in <strong>Setup</strong> to find matched sponsors.</div>
+      <button class="btn-accent" onclick="showScreen('setup')">Run Analysis →</button>
+    </div>
+
+    <div id="sponsors-grid" class="sponsor-grid" style="display:none"></div>
+  </div>
+
+  <!-- ══ SCREEN: Pitch Builder ═════════════════════════════════════════════ -->
+  <div class="screen" id="screen-pitch">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Pitch Builder</h1>
+        <p class="page-sub">AI-generated sponsor outreach emails — personalized, priced, and ready to send.</p>
+      </div>
+    </div>
+
+    <div id="pitch-empty" class="surface-card empty-state" style="padding:60px">
+      <div class="empty-icon">✉️</div>
+      <div class="empty-text">No pitch generated yet.</div>
+      <div class="empty-sub">Go to <strong>Sponsor Finder</strong> and click "Generate Pitch" on a match.</div>
+      <button class="btn-accent" onclick="showScreen('sponsors')">View Sponsors →</button>
+    </div>
+
+    <div id="pitch-builder" style="display:none">
+      <!-- Pricing strip -->
+      <div class="pricing-strip">
+        <div class="price-item">
+          <div class="price-label">Sponsor</div>
+          <div class="price-val" id="pb-sponsor">—</div>
+          <a id="pb-website" href="#" target="_blank" class="btn-ghost small" style="margin-top: 8px; display: inline-block; text-decoration: none;">Visit Website ↗</a>
+        </div>
+        <div class="price-sep"></div>
+        <div class="price-item">
+          <div class="price-label">Recommended Rate</div>
+          <div class="price-val accent dm-mono" id="pb-rate">—</div>
+        </div>
+        <div class="price-sep"></div>
+        <div class="price-item">
+          <div class="price-label">Range</div>
+          <div class="price-val dm-mono" id="pb-range">—</div>
+        </div>
+        <div class="price-sep"></div>
+        <div class="price-item">
+          <div class="price-label">Pitch Strength</div>
+          <div class="strength-bar-wrap">
+            <div class="strength-bar"><div class="strength-fill" id="pb-strength-fill"></div></div>
+            <span class="strength-val dm-mono" id="pb-strength-val">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Three-panel pitch -->
+      <div class="pitch-three-col">
+        <div class="surface-card pitch-panel">
+          <div class="card-title">Subject Line
+            <button class="copy-btn" onclick="copyEl('pb-subject')">Copy</button>
+          </div>
+          <div class="pitch-subject" id="pb-subject">—</div>
+        </div>
+        <div class="surface-card pitch-panel">
+          <div class="card-title">Email Body
+            <button class="copy-btn" onclick="copyEl('pb-body')">Copy</button>
+          </div>
+          <div class="pitch-body" id="pb-body">—</div>
+        </div>
+        <div class="surface-card pitch-panel">
+          <div class="card-title">Follow-Up (Day 5)
+            <button class="copy-btn" onclick="copyEl('pb-followup')">Copy</button>
+          </div>
+          <div class="pitch-body" id="pb-followup">—</div>
+        </div>
+      </div>
+
+      <!-- Pitch loading overlay -->
+      <div id="pitch-loading" class="pitch-loading-overlay" style="display:none">
+        <div class="loading-orb small"></div>
+        <div>Generating personalized pitch with Claude...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN: Ad Placement ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-placement">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Ad Placement</h1>
+        <p class="page-sub">AI-identified optimal ad moments in your episode transcript.</p>
+      </div>
+    </div>
+
+    <div id="placement-empty" class="surface-card empty-state" style="padding:60px">
+      <div class="empty-icon">📍</div>
+      <div class="empty-text">No ad placements analyzed yet.</div>
+      <div class="empty-sub">Run the AI Analysis in <strong>Setup</strong> to detect optimal ad moments.</div>
+      <button class="btn-accent" onclick="showScreen('setup')">Run Analysis →</button>
+    </div>
+
+    <div id="placement-content" style="display:none">
+      <!-- Timeline -->
+      <div class="surface-card">
+        <div class="card-title">📍 Episode Timeline</div>
+        <div class="timeline-bar">
+          <div class="timeline-track" id="timeline-track"></div>
+        </div>
+        <div class="timeline-legend">
+          <span class="legend-item"><span class="legend-dot high"></span>High engagement</span>
+          <span class="legend-item"><span class="legend-dot medium"></span>Medium</span>
+          <span class="legend-item"><span class="legend-dot low"></span>Low</span>
+        </div>
+      </div>
+
+      <!-- Placement cards -->
+      <div class="placement-cards" id="placement-cards"></div>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN: Pricing Tool ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-pricing">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Pricing Tool</h1>
+        <p class="page-sub">Data-driven sponsorship pricing — CPM benchmarks, deal tiers, and revenue projection.</p>
+      </div>
+    </div>
+
+    <div id="pricing-empty" class="surface-card empty-state" style="padding:60px">
+      <div class="empty-icon">💰</div>
+      <div class="empty-text">No pricing data yet.</div>
+      <div class="empty-sub">Run the AI Analysis in <strong>Setup</strong> to generate pricing intelligence.</div>
+      <button class="btn-accent" onclick="showScreen('setup')">Run Analysis →</button>
+    </div>
+
+    <div id="pricing-content" style="display:none">
+      <!-- CPM benchmarks -->
+      <div class="pricing-three-col">
+        <div class="surface-card pricing-tier">
+          <div class="tier-badge ghost-badge">Floor</div>
+          <div class="tier-price dm-mono" id="pt-floor">—</div>
+          <div class="tier-label">/ month</div>
+          <div class="tier-desc">Post-roll · minimum defensible rate</div>
+        </div>
+        <div class="surface-card pricing-tier featured-tier">
+          <div class="tier-badge accent-badge">Recommended</div>
+          <div class="tier-price dm-mono accent" id="pt-rec">—</div>
+          <div class="tier-label">/ month</div>
+          <div class="tier-desc">Host-read mid-roll · optimal ask</div>
+        </div>
+        <div class="surface-card pricing-tier">
+          <div class="tier-badge highlight-badge">Ceiling</div>
+          <div class="tier-price dm-mono" id="pt-ceiling">—</div>
+          <div class="tier-label">/ month</div>
+          <div class="tier-desc">Exclusive deal · premium ask</div>
+        </div>
+      </div>
+
+      <!-- CPM breakdown -->
+      <div class="surface-card">
+        <div class="card-title">CPM Breakdown by Deal Type</div>
+        <div class="cpm-table" id="cpm-table"></div>
+      </div>
+
+      <!-- Audience quality -->
+      <div class="surface-card">
+        <div class="card-title">Audience Quality Score</div>
+        <div class="quality-row">
+          <div class="quality-score-big dm-mono accent" id="pt-quality">—</div>
+          <div class="quality-bar-wrap">
+            <div class="quality-bar"><div class="quality-fill" id="pt-quality-fill"></div></div>
+            <div class="quality-desc" id="pt-persona">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

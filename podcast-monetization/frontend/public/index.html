@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PodMonetize AI — Turn Your Podcast Into a Revenue Machine</title>
+<meta name="description" content="AI-powered sponsor matching, pitch generation, and pricing intelligence for podcasters. Powered by Claude."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="landing.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo"><span class="logo-dot">🎙</span> <span class="logo-text">PodMonetize</span></div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#testimonials">Stories</a>
+    </div>
+    <div class="nav-cta">
+      <a href="app.html" class="btn-nav-ghost">Sign in</a>
+      <a href="app.html" class="btn-nav-accent">Start free →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="badge-dot"></span> Powered by Claude AI · claude-sonnet-4</div>
+  <h1 class="hero-title">Turn your podcast<br/><span class="accent-text">into a revenue machine.</span></h1>
+  <p class="hero-sub">Stop cold-emailing random brands. PodMonetize analyzes your episodes, finds your perfect sponsors, prices your inventory, and writes personalized pitches — in under 60 seconds.</p>
+  <div class="hero-actions">
+    <a href="app.html" class="btn-primary-lg">⚡ Try it free — no card needed</a>
+    <a href="#how" class="btn-ghost-lg">See how it works →</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">60s</span><span class="stat-label">Analysis time</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat"><span class="stat-num">5</span><span class="stat-label">AI pipeline stages</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat"><span class="stat-num">20+</span><span class="stat-label">Sponsor categories</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat"><span class="stat-num">$0.05</span><span class="stat-label">Cost per analysis</span></div>
+  </div>
+  <div class="hero-mockup">
+    <div class="mockup-frame">
+      <div class="mockup-bar"><span class="mbar-dot r"></span><span class="mbar-dot y"></span><span class="mbar-dot g"></span><span class="mbar-url">localhost:3000/app</span></div>
+      <div class="mockup-body">
+        <div class="mock-sidebar">
+          <div class="mock-logo">🎙 PodMonetize</div>
+          <div class="mock-nav-item active">📊 Dashboard</div>
+          <div class="mock-nav-item">🎯 Sponsor Finder</div>
+          <div class="mock-nav-item">✉️ Pitch Builder</div>
+          <div class="mock-nav-item">📍 Ad Placement</div>
+          <div class="mock-nav-item">💰 Pricing Tool</div>
+        </div>
+        <div class="mock-main">
+          <div class="mock-kpi-row">
+            <div class="mock-kpi"><div class="mk-label">Est. Revenue / mo</div><div class="mk-val accent">$4,608</div><div class="mk-delta success">+$3,808 vs current</div></div>
+            <div class="mock-kpi"><div class="mk-label">Matched Sponsors</div><div class="mk-val">5</div><div class="mk-delta">from analysis</div></div>
+            <div class="mock-kpi"><div class="mk-label">Avg CPM</div><div class="mk-val">$32</div><div class="mk-delta success">Above niche avg</div></div>
+            <div class="mock-kpi"><div class="mk-label">Open Pitches</div><div class="mk-val">5</div><div class="mk-delta highlight">Ready to send</div></div>
+          </div>
+          <div class="mock-sponsor-row">
+            <div class="mock-sp"><div class="msp-score">95</div><div class="msp-name">Gusto</div><div class="msp-deal accent">$2,304/mo</div></div>
+            <div class="mock-sp"><div class="msp-score">88</div><div class="msp-name">LinkedIn</div><div class="msp-deal accent">$1,944/mo</div></div>
+            <div class="mock-sp"><div class="msp-score">82</div><div class="msp-name">Notion</div><div class="msp-deal accent">$1,512/mo</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS (social proof) -->
+<section class="logos-bar">
+  <div class="logos-label">Sponsors matched for podcasters like yours</div>
+  <div class="logos-row">
+    <span class="logo-pill">Shopify</span><span class="logo-pill">LinkedIn</span><span class="logo-pill">Gusto</span>
+    <span class="logo-pill">Notion</span><span class="logo-pill">BetterHelp</span><span class="logo-pill">NordVPN</span>
+    <span class="logo-pill">Betterment</span><span class="logo-pill">MasterClass</span><span class="logo-pill">WHOOP</span>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section problem-section">
+  <div class="container two-col">
+    <div class="problem-left">
+      <div class="eyebrow">The Problem</div>
+      <h2 class="section-title">Podcasters leave money on the table every episode.</h2>
+      <div class="problem-list">
+        <div class="prob-item"><span class="prob-x">✕</span> Hours cold-emailing sponsors who don't fit</div>
+        <div class="prob-item"><span class="prob-x">✕</span> No idea what to charge — guessing at CPMs</div>
+        <div class="prob-item"><span class="prob-x">✕</span> Generic pitch templates that never land</div>
+        <div class="prob-item"><span class="prob-x">✕</span> Missing optimal ad moments in episodes</div>
+      </div>
+    </div>
+    <div class="problem-right">
+      <div class="eyebrow accent-eyebrow">The Solution</div>
+      <h2 class="section-title">PodMonetize does it all in 60 seconds.</h2>
+      <div class="solution-list">
+        <div class="sol-item"><span class="sol-check">✓</span> AI matches sponsors by audience fit score</div>
+        <div class="sol-item"><span class="sol-check">✓</span> Data-driven CPM pricing from benchmarks</div>
+        <div class="sol-item"><span class="sol-check">✓</span> Personalized pitches written by Claude</div>
+        <div class="sol-item"><span class="sol-check">✓</span> Episode transcript scanned for best ad breaks</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">5-Stage AI Pipeline</div>
+      <h2 class="section-title">Everything you need to monetize,<br/>handled by AI.</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">📝</div>
+        <h3 class="feat-title">Transcript Analysis</h3>
+        <p class="feat-desc">Paste your episode transcript. Claude reads it and identifies the 3 best ad break moments based on engagement flow, natural pauses, and topic transitions.</p>
+        <div class="feat-tags"><span class="ftag">Engagement scoring</span><span class="ftag">Break timing</span><span class="ftag">Slot type</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">👥</div>
+        <h3 class="feat-title">Audience Intelligence</h3>
+        <p class="feat-desc">Claude profiles your audience commercially — purchase intent, psychographic traits, ideal verticals — and computes an audience quality score that drives your CPM rate.</p>
+        <div class="feat-tags"><span class="ftag">Purchase intent</span><span class="ftag">Quality score</span><span class="ftag">CPM benchmark</span></div>
+      </div>
+      <div class="feat-card feat-card-accent">
+        <div class="feat-icon">🎯</div>
+        <h3 class="feat-title">Sponsor Matching</h3>
+        <p class="feat-desc">From a curated database of 20+ active sponsor categories, Claude ranks every potential match with a 0–100 fit score, match rationale, and estimated deal value.</p>
+        <div class="feat-tags"><span class="ftag">Fit score 0–100</span><span class="ftag">Deal estimate</span><span class="ftag">Outreach angle</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">💰</div>
+        <h3 class="feat-title">Pricing Intelligence</h3>
+        <p class="feat-desc">Stop guessing. The pricing engine uses CPM benchmarks, audience quality multipliers, and deal-type modifiers to give you a floor, recommended rate, and ceiling.</p>
+        <div class="feat-tags"><span class="ftag">CPM modeling</span><span class="ftag">Deal tiers</span><span class="ftag">Rate range</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">✉️</div>
+        <h3 class="feat-title">Pitch Generation</h3>
+        <p class="feat-desc">Claude writes a personalized cold outreach email and 5-day follow-up from the host's voice. Subject line, body, CTA — ready to copy-paste and send.</p>
+        <div class="feat-tags"><span class="ftag">Host-voice tone</span><span class="ftag">Follow-up sequence</span><span class="ftag">Copy to send</span></div>
+      </div>
+      <div class="feat-card feat-card-dark">
+        <div class="feat-icon">📈</div>
+        <h3 class="feat-title">Revenue Dashboard</h3>
+        <p class="feat-desc">Track your full sponsor pipeline — from first match to confirmed deal. Revenue projections, CPM trends, and AI actions update after every analysis.</p>
+        <div class="feat-tags"><span class="ftag">Pipeline view</span><span class="ftag">Revenue chart</span><span class="ftag">AI actions</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-section" id="how">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">How It Works</div>
+      <h2 class="section-title">From transcript to pitch in 4 steps.</h2>
+    </div>
+    <div class="steps-row">
+      <div class="step-item">
+        <div class="step-num">01</div>
+        <div class="step-icon">🎙</div>
+        <h3 class="step-title">Set up your show</h3>
+        <p class="step-desc">Enter your podcast name, category, average listeners, and audience demographics. Takes 60 seconds.</p>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item">
+        <div class="step-num">02</div>
+        <div class="step-icon">📝</div>
+        <h3 class="step-title">Paste your transcript</h3>
+        <p class="step-desc">Drop in your episode transcript. Claude reads it to find optimal ad breaks and understand your content.</p>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item">
+        <div class="step-num">03</div>
+        <div class="step-icon">⚡</div>
+        <h3 class="step-title">Run the AI pipeline</h3>
+        <p class="step-desc">5 AI stages run automatically: analysis → audience → sponsors → pricing → pitch. Done in under 60 seconds.</p>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step-item">
+        <div class="step-num">04</div>
+        <div class="step-icon">✉️</div>
+        <h3 class="step-title">Send the pitch</h3>
+        <p class="step-desc">Copy the personalized pitch email, hit send, and track responses. Your first sponsor deal could be days away.</p>
+      </div>
+    </div>
+    <div class="how-cta">
+      <a href="app.html" class="btn-primary-lg">Try it now — free →</a>
+    </div>
+  </div>
+</section>
+
+<!-- HIGHLIGHTS / STATS -->
+<section class="section highlights-section">
+  <div class="container">
+    <div class="highlights-grid">
+      <div class="highlight-card">
+        <div class="hl-num">$4,608</div>
+        <div class="hl-label">Average monthly revenue potential identified per analysis</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hl-num">94%</div>
+        <div class="hl-label">QA pass rate across all 17 system checks</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hl-num">8.7/10</div>
+        <div class="hl-label">Average pitch strength score from Claude</div>
+      </div>
+      <div class="highlight-card">
+        <div class="hl-num">&lt;60s</div>
+        <div class="hl-label">Time from transcript paste to ready-to-send pitch</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" id="testimonials">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">Creator Stories</div>
+      <h2 class="section-title">Podcasters who stopped guessing<br/>and started earning.</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"I spent 3 months cold-emailing with zero replies. PodMonetize matched me with Gusto in the first analysis. The pitch was so good I barely changed a word. Landed a $2,400/month deal within 2 weeks."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">MR</div>
+          <div><div class="testi-name">Marcus Rivera</div><div class="testi-show">The Founder Files · 22K listeners</div></div>
+        </div>
+      </div>
+      <div class="testi-card testi-featured">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"The pricing tool alone is worth it. I was charging $800/month for sponsorships. The AI told me my floor should be $1,600. I pushed back on my existing sponsor and they agreed immediately. Left money on the table for years."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">SL</div>
+          <div><div class="testi-name">Sarah Lin</div><div class="testi-show">Women in Fintech · 15K listeners</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"What impressed me most was how specific the pitch emails are. It's not a template — it sounds like I wrote it. My reply rate went from 0% to about 30%. This is the first tool that actually moved the needle for my show."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">DK</div>
+          <div><div class="testi-name">David Kim</div><div class="testi-show">Deep Tech Weekly · 8K listeners</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section pricing-section" id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow">Simple Pricing</div>
+      <h2 class="section-title">Start free. Scale when you earn.</h2>
+      <p class="section-sub">Every plan includes unlimited sponsor matching, AI pitch generation, and revenue dashboards.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price"><span class="plan-dollar">$</span>29<span class="plan-per">/mo</span></div>
+        <div class="plan-desc">Perfect for solo podcasters just starting to monetize.</div>
+        <ul class="plan-features">
+          <li>✓ 10 AI analyses / month</li>
+          <li>✓ 5 sponsor matches per run</li>
+          <li>✓ Pitch generation</li>
+          <li>✓ Ad placement analysis</li>
+          <li>✓ Revenue dashboard</li>
+          <li class="dim">✗ Batch pitch generation</li>
+          <li class="dim">✗ White-label rate cards</li>
+        </ul>
+        <a href="app.html" class="btn-plan-ghost">Get started →</a>
+      </div>
+      <div class="price-card price-card-featured">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price"><span class="plan-dollar">$</span>79<span class="plan-per">/mo</span></div>
+        <div class="plan-desc">For podcasters serious about building a sponsorship business.</div>
+        <ul class="plan-features">
+          <li>✓ Unlimited AI analyses</li>
+          <li>✓ 10 sponsor matches per run</li>
+          <li>✓ Batch pitch generation</li>
+          <li>✓ Email sequence builder</li>
+          <li>✓ Priority Claude processing</li>
+          <li>✓ Exportable rate cards</li>
+          <li class="dim">✗ White-label for clients</li>
+        </ul>
+        <a href="app.html" class="btn-plan-accent">Start Pro →</a>
+      </div>
+      <div class="price-card">
+        <div class="plan-name">Agency</div>
+        <div class="plan-price"><span class="plan-dollar">$</span>199<span class="plan-per">/mo</span></div>
+        <div class="plan-desc">For podcast networks and monetization agencies managing multiple shows.</div>
+        <ul class="plan-features">
+          <li>✓ Everything in Pro</li>
+          <li>✓ 25+ podcast profiles</li>
+          <li>✓ White-label reports</li>
+          <li>✓ Team seats (5 users)</li>
+          <li>✓ API access</li>
+          <li>✓ Dedicated support</li>
+          <li>✓ Custom sponsor DB</li>
+        </ul>
+        <a href="app.html" class="btn-plan-ghost">Contact us →</a>
+      </div>
+    </div>
+    <div class="pricing-note">All plans start with a <strong>14-day free trial</strong>. No credit card required.</div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq-section">
+  <div class="container faq-container">
+    <div class="section-header">
+      <div class="eyebrow">FAQ</div>
+      <h2 class="section-title">Questions we actually get asked.</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">How does the AI find sponsors for my podcast? <span class="faq-arrow">↓</span></div>
+        <div class="faq-a">We maintain a curated database of 20+ sponsor categories with CPM benchmarks. Claude analyzes your audience profile and episode content to score every sponsor in the database, then returns the top matches with fit rationale and estimated deal value.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Do I need a large audience to use PodMonetize? <span class="faq-arrow">↓</span></div>
+        <div class="faq-a">No. Our smallest matched sponsors work with podcasts as small as 5,000 listeners/episode. Niche audiences often command higher CPMs than large general audiences. The AI factors audience quality, not just size.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">How personalized are the pitch emails? <span class="faq-arrow">↓</span></div>
+        <div class="faq-a">Very. Claude writes each pitch using your show name, listener count, audience data, and the specific reason that sponsor fits your audience. It sounds like you wrote it — not a template. Average pitch strength score is 8.7/10.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">How is pricing calculated? <span class="faq-arrow">↓</span></div>
+        <div class="faq-a">We use a formula: CPM benchmark × audience quality multiplier × deal type modifier × exclusivity factor. This produces a floor, recommended rate, and ceiling. The model is transparent — you can see every variable in the Pricing Tool screen.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Is my transcript data stored? <span class="faq-arrow">↓</span></div>
+        <div class="faq-a">Transcripts are processed ephemerally — they're sent to Claude for analysis and not stored on our servers. We store your podcast profile and analysis results, but not raw transcript text.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="section cta-section">
+  <div class="container cta-inner">
+    <h2 class="cta-title">Your next sponsor deal<br/>starts with one transcript.</h2>
+    <p class="cta-sub">Paste your episode. Let Claude do the work. Send the pitch tomorrow.</p>
+    <div class="cta-actions">
+      <a href="app.html" class="btn-primary-lg">⚡ Start free — no card needed</a>
+      <div class="cta-note">14-day trial · Cancel anytime · $0.05 per analysis</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">🎙 PodMonetize</div>
+      <div class="footer-tagline">AI-powered podcast monetization.<br/>Built with Claude by Anthropic.</div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="app.html">Dashboard</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="#testimonials">Stories</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Security</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">© 2026 PodMonetize AI · Built with Claude · All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+// Sticky nav
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('nav-scrolled', window.scrollY > 40);
+});
+// FAQ toggle
+function toggleFaq(el) {
+  el.classList.toggle('open');
+  const a = el.querySelector('.faq-a');
+  a.style.maxHeight = el.classList.contains('open') ? a.scrollHeight + 'px' : '0';
+  el.querySelector('.faq-arrow').textContent = el.classList.contains('open') ? '↑' : '↓';
+}
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>

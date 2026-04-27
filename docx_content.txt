@@ -1,0 +1,512 @@
+﻿PODMONETIZE AI
+Podcast Monetization Intelligence Platform
+End-to-End System Design ┬╖ UI Specification ┬╖ Build Blueprint
+≡ƒÄÖ∩╕Å  Target Users
+Mid-size podcasters, 1KΓÇô100K listeners
+≡ƒÆ░  Revenue Unlock
+$500ΓÇô$5,000/month better sponsorships
+≡ƒñû  Core Tech
+Claude AI (Anthropic) + React Frontend
+≡ƒÅù∩╕Å  Architecture
+Full-stack, AI-native, end-to-end
+ΓÜí  POWERED BY CLAUDE AI (ANTHROPIC CLAUDE SONNET)  ΓÇö  This entire platform's intelligence layer runs on Claude via the Anthropic API, enabling sponsor matching, pitch generation, pricing intelligence, and ad-placement analysis entirely from natural language processing.
+01  THE PROBLEM SPACE
+Most mid-size podcasters leave significant revenue on the tableΓÇönot because they lack listeners, but because they lack the infrastructure to identify, pitch, and price sponsors correctly. The gap between a $200 CPM and a $50 CPM is often just context: knowing what your audience buys, who to approach, and how to frame the ask.
+Γ¥î  What Podcasters Don't Know
+≡ƒÿ⌐  The Manual Pain
+≡ƒÆ╕  The Revenue Lost
+Where to place pre-roll vs mid-roll ads for maximum engagement without listener drop-off
+Hours spent cold-emailing random brands with generic decks that never convert
+$200ΓÇô$800/episode left on table due to under-pricing or poor category fit
+Which sponsor categories convert for their niche (tech, health, finance?)
+Researching brand values, guidelines, contacts ΓÇö starts from zero each time
+80% of podcasters have no tiered pricing ΓÇö charge same for 1K and 50K listeners
+What price to charge ($15 CPM? $35 CPM? flat fee?)
+Negotiating without benchmarks or competitive data
+No analytics to prove ROI ΓÇö sponsors churn after one campaign
+02  SYSTEM ARCHITECTURE
+PodMonetize AI is a full-stack, AI-native SaaS platform with four primary layers: Data Ingestion, AI Processing (powered by Claude), a React Dashboard, and an Outreach Engine. Each layer communicates through a RESTful API with a PostgreSQL + Redis data store.
+2.1  High-Level Architecture Overview
+PODMONETIZE AI  ΓÇö  FULL SYSTEM ARCHITECTURE
+[ PODCAST HOST ] ΓåÆ RSS / Spotify / Apple Podcast API ΓåÆ [ INGESTION LAYER ]
+Γåô
+[ CLAUDE AI ENGINE ]  Sponsor Matching ┬╖ Pitch Generation ┬╖ Ad Placement ┬╖ Pricing Intelligence
+Γåô
+[ REACT DASHBOARD ]  ΓåÉΓåÆ  [ FASTAPI BACKEND ]  ΓåÉΓåÆ  [ PostgreSQL + Redis ]
+Γåô
+[ OUTREACH ENGINE ]  Email Automation ┬╖ CRM ┬╖ Campaign Tracker ┬╖ Analytics
+2.2  Technology Stack
+Layer
+Technology
+Purpose / Notes
+Frontend
+React 18 + Vite + TailwindCSS
+SPA dashboard; fast HMR; utility-first styling
+UI Components
+Shadcn/UI + Radix Primitives
+Accessible, composable, unstyled base components
+State
+Zustand + React Query (TanStack)
+Lightweight global state; server sync & caching
+Charts
+Recharts + D3.js
+Revenue graphs, CPM trends, audience heatmaps
+Backend
+FastAPI (Python 3.11)
+Async REST API; OpenAPI docs auto-generated
+AI Engine
+Anthropic Claude API (claude-sonnet-4)
+Sponsor matching, pitch writing, pricing analysis
+Database
+PostgreSQL 15 + Prisma ORM
+Relational; sponsor DB, podcast profiles, campaigns
+Cache/Queue
+Redis + Celery
+Job queue for AI calls; session caching
+Auth
+Auth0 / Clerk
+OAuth2 (Spotify, Google); JWT sessions
+File Storage
+AWS S3 / Cloudflare R2
+Episode audio, export PDFs, pitch decks
+Email
+Resend + React Email
+Templated outreach emails; delivery tracking
+Hosting
+Railway / Render (backend) + Vercel (frontend)
+Zero-config deployment; autoscale
+Analytics
+PostHog (self-hostable)
+Product analytics; user behavior; funnel tracking
+Monitoring
+Sentry + Datadog
+Error tracking; API latency; AI cost monitoring
+03  AI PIPELINE  (Claude-Powered)
+The AI pipeline is the core differentiator. Every intelligence feature ΓÇö sponsor matching, pitch generation, ad placement, and pricing ΓÇö runs through Claude (Anthropic). The API is called server-side from the FastAPI backend, ensuring API key security and allowing response caching via Redis.
+3.1  Pipeline Steps
+#
+Step
+Claude Prompt Strategy
+Output
+1
+Listener Profile Analysis
+Send episode transcripts + RSS analytics to Claude. Prompt: "Analyze this podcast audience. Identify demographics, interests, purchase intent signals, and top 5 sponsor categories that would convert."
+Audience profile JSON: age range, income bracket, interest clusters, sponsor category scores
+2
+Sponsor Matching
+Pass audience profile + curated sponsor database to Claude. Prompt: "Match these sponsors to this podcast audience. Score each 1ΓÇô100 for fit, explain why, and flag brand safety concerns."
+Ranked sponsor list with match score, rationale, and contact tier (warm/cold)
+3
+Ad Placement Analysis
+Send episode audio timestamps + engagement data. Prompt: "Identify optimal pre-roll, mid-roll, and post-roll placements. Predict drop-off risk for each slot."
+Placement map with timestamps, predicted engagement %, slot type recommendations
+4
+Pitch Generation
+Pass sponsor profile + podcast data + tone preference. Prompt: "Write a personalized sponsorship pitch email. Tone: [professional/casual/bold]. Include specific stats, listener fit data, and a clear CTA with pricing tier."
+Draft pitch email, subject line variants, follow-up sequence (3 emails)
+5
+Pricing Intelligence
+Send CPM benchmarks + audience size + niche + engagement. Prompt: "Calculate fair market rate for this podcast. Suggest 3 pricing tiers: starter, standard, premium. Justify with market comparables."
+Pricing model: CPM range, flat fee options, bundle packages, negotiation floor
+6
+Performance Reporting
+After campaign ends, pass metrics back. Prompt: "Analyze campaign performance. What worked? What sponsor categories outperformed? Suggest optimizations for next cycle."
+Campaign report with insights, sponsor retention score, next-cycle recommendations
+3.2  Claude API Integration Pattern
+Backend Call Structure (FastAPI ΓåÆ Anthropic API)
+POST /api/v1/analyze/sponsor-match  ΓåÆ  FastAPI route handler  ΓåÆ  Build Claude prompt with podcast context  ΓåÆ  POST https://api.anthropic.com/v1/messages (model: claude-sonnet-4, max_tokens: 2000)  ΓåÆ  Parse structured JSON response  ΓåÆ  Cache result in Redis (TTL: 24h)  ΓåÆ  Return to React frontend via WebSocket for real-time streaming
+Γ£à  Claude API Best Practices (Implemented)
+ΓÜÖ∩╕Å  Cost & Performance Controls
+System prompt with podcast domain context injected every call
+ΓÇó Streaming enabled for pitch generation (real-time UI updates)
+ΓÇó Structured JSON output enforced via prompt engineering
+ΓÇó Retry logic with exponential backoff (3 attempts)
+ΓÇó Input sanitization before sending user data to Claude
+Redis caching: identical podcast profiles skip API call
+ΓÇó Batch processing: analyze all sponsors in one call vs. N calls
+ΓÇó Token budget alerts: warn if monthly usage exceeds threshold
+ΓÇó Cost per feature tracked in PostHog analytics
+ΓÇó Response streaming reduces perceived latency to <1s
+04  UI DESIGN SYSTEM  &  SCREEN SPECIFICATIONS
+The PodMonetize dashboard follows a dark-primary design language ΓÇö professional, data-dense, and editorial. Inspired by Linear's density, Stripe's data clarity, and Pitch's boldness. Built with React + TailwindCSS + Shadcn/UI.
+4.1  Design Language
+Token
+Value
+Usage
+--primary
+#1A1A2E
+Dashboard background, sidebar, cards
+--accent
+#E94560
+CTAs, active states, revenue highlights, key metrics
+--highlight
+#F5A623
+Warning states, pricing tiers, budget alerts
+--surface
+#16213E
+Card backgrounds, modals, elevated surfaces
+--border
+#2A2D4A
+Dividers, card outlines, input borders
+--text-primary
+#F0F0FF
+Headings, key labels, primary copy
+--text-muted
+#8B8FA8
+Secondary labels, timestamps, helper text
+--success
+#10B981
+Confirmed sponsors, positive deltas, active campaigns
+Font: Display
+DM Mono (Google Fonts)
+Logo, stats, revenue numbers ΓÇö monospaced authority
+Font: Body
+Inter (Variable)
+All UI copy, labels, descriptions ΓÇö clean legibility
+Font: Accent
+Syne (Google Fonts)
+Section headers, card titles ΓÇö editorial character
+Border Radius
+8px cards / 4px inputs / 50px pills
+Consistent geometry; not too rounded, not sharp
+Shadow
+0 4px 24px rgba(0,0,0,0.4)
+Card elevation; dark-mode optimized shadow
+Animation
+150ms ease-out (micro) / 300ms (page)
+Framer Motion for route transitions; CSS for micro
+4.2  UI Inspiration References
+The following platforms should be studied and referenced during design/build:
+Reference App
+URL / Where to Study
+What to Steal
+Linear.app
+linear.app (sign up free)
+Sidebar density, keyboard shortcuts, issue card design, dark theme system, command palette (ΓîÿK)
+Stripe Dashboard
+dashboard.stripe.com
+Revenue metrics layout, transaction tables, date filter patterns, status badge system
+Pitch.com
+pitch.com
+Bold typography, section headers, color usage on dark backgrounds, editorial spacing
+Attio CRM
+attio.com
+Record views, table interactions, tag/label system for sponsor pipeline
+Rows.com
+rows.com
+Data table UX, spreadsheet-meets-app feel for sponsor pipeline management
+Transistor.fm
+transistor.fm (dashboard)
+Podcast-specific analytics patterns ΓÇö the only direct domain reference
+Podchaser
+podchaser.com
+Podcast metadata UI, audience demographic display patterns
+Mailshake
+mailshake.com
+Email sequence builder UI ΓÇö reference for the pitch outreach sequence editor
+05  SCREEN-BY-SCREEN  UI  SPECIFICATION
+SCREEN 1  ΓÇö  Dashboard Home (/)
+Purpose
+First thing the podcaster sees after login. Immediate value: revenue summary, active sponsor pipeline, and AI-generated action items for today. No charts for the sake of charts ΓÇö every number is actionable.
+LAYOUT  (Desktop ΓÇö 1280px+)
+ΓöîΓöÇ Sidebar (240px) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö¼ΓöÇ Main Content (flex) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé  Logo + Podcast Name             Γöé  ΓöîΓöÇΓöÇ KPI Strip (4 cards) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ  Γöé
+Γöé  ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ           Γöé  Γöé Est. Revenue Γöé Active Γöé CPM Γöé Open Γöé  Γöé
+Γöé  ≡ƒôè Dashboard         ΓåÉactive    Γöé  ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ  Γöé
+Γöé  ≡ƒÄ» Sponsor Finder               Γöé  ΓöîΓöÇΓöÇ AI Actions ΓöÇΓöÇΓöÉ ΓöîΓöÇΓöÇ Pipeline ΓöÇΓöÇΓöÇΓöÉ  Γöé
+Γöé  Γ£ë∩╕Å  Pitch Builder               Γöé  Γöé  3 new sponsor Γöé Γöé Kanban: 12    Γöé  Γöé
+Γöé  ≡ƒôì Ad Placement                 Γöé  Γöé  matches ready Γöé Γöé leads active  Γöé  Γöé
+Γöé  ≡ƒÆ░ Pricing Tool                 Γöé  ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ  Γöé
+Γöé  ≡ƒôê Analytics                    Γöé  ΓöîΓöÇΓöÇ Revenue Chart (12 weeks) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ  Γöé
+Γöé  ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ           Γöé  Γöé                                    Γöé  Γöé
+Γöé  ΓÜÖ∩╕Å  Settings                    Γöé  ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ  Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓö┤ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+Est. Revenue (MTD)
+Active Sponsors
+Avg CPM
+Open Pitches
+$3,240
+4
+$28.50
+7
++18% vs last month
++1 this week
+Above niche avg
+3 need follow-up
+SCREEN 2  ΓÇö  Sponsor Finder (/sponsors)
+Purpose
+Core AI feature. User inputs podcast niche + recent episodes ΓåÆ Claude analyzes and returns ranked sponsor matches with fit scores, contact info tier, and brand safety flags. Filter by category, budget, or match score.
+Key UI Elements:
+Search + Filter Bar: niche input, budget range slider, category multi-select (DTC, B2B SaaS, Health, Finance, etc.)
+AI Match Cards: sponsor logo, match score (0ΓÇô100, color-coded), fit rationale (2 sentences from Claude), category tags, estimated CPM range
+Quick Actions on each card: "Generate Pitch", "Save to Pipeline", "View Brand Guidelines"
+Batch Select: select 3ΓÇô5 sponsors ΓåÆ "Generate all pitches at once" ΓåÆ Claude batch processes
+Brand Safety Flag: red badge if Claude detects potential content mismatch
+SCREEN 3  ΓÇö  Pitch Builder (/pitch)
+Purpose
+The money-maker screen. Claude generates personalized pitch emails, the user can edit inline, and send directly or export to their email client. Three-panel layout: sponsor brief | pitch draft | email preview.
+Key UI Elements:
+Panel 1 ΓÇö Sponsor Brief: auto-filled from Sponsor Finder; editable fields for custom notes, past relationship context, budget ask
+Panel 2 ΓÇö AI Draft: Claude streams the pitch in real-time (typing animation). Tone selector: Professional / Casual / Bold. "Regenerate" and "Improve" buttons send follow-up Claude prompts.
+Panel 3 ΓÇö Email Preview: live preview of how the email renders. Subject line A/B variants (Claude generates 3). One-click "Open in Gmail/Outlook."
+Follow-up Sequence Builder: after main pitch, Claude generates a 3-email drip sequence with suggested send timing (Day 3, Day 7, Day 14)
+Export: Save as PDF pitch deck, copy to clipboard, or push to CRM
+SCREEN 4  ΓÇö  Ad Placement Analyzer (/placement)
+Purpose
+Upload or link an episode ΓåÆ Claude analyzes transcript and suggests optimal timestamps for pre-roll, mid-roll, and post-roll placements. Shows predicted listener retention at each point.
+Key UI Elements:
+Episode Selector: connect RSS/Spotify; pick from latest 10 episodes; or paste YouTube/audio URL
+Timeline Visualizer: horizontal scrubber showing episode duration with color-coded placement zones (green = high retention, red = drop-off risk)
+Placement Cards: for each recommended slot ΓÇö timestamp, predicted reach %, slot type, suggested ad length, revenue estimate
+Engagement Heatmap: listener retention curve overlaid with ad placement markers (like YouTube Studio analytics)
+One-Click Apply: send placement spec to the Pitch Builder with timestamps pre-filled for sponsor deliverables
+SCREEN 5  ΓÇö  Pricing Intelligence (/pricing)
+Purpose
+Claude calculates fair market rates based on niche, audience size, engagement, and sponsor category. Outputs three pricing tiers with justification and a negotiation floor.
+Key UI Elements:
+Input Form: monthly downloads, audience demographics (auto-filled from profile), niche, engagement rate, sponsor category target
+Pricing Output: 3-tier card layout ΓÇö Starter (small brands, 1 placement), Standard (mid-size, multi-episode), Premium (exclusive, series sponsor)
+CPM Benchmark Chart: bar chart showing your CPM vs. niche average vs. top-percentile podcasts in same category
+Negotiation Guide: Claude outputs a 3-bullet negotiation strategy ΓÇö your floor price, when to offer bundles, how to handle counter-offers
+Rate Card Generator: export a branded PDF rate card (auto-designed) with your photo, podcast stats, and pricing tiers
+06  COMPONENT LIBRARY  &  DOWNLOAD GUIDE
+This section lists every UI component, library, and asset needed to build PodMonetize AI ΓÇö with direct download URLs, npm install commands, and configuration notes.
+6.1  NPM Packages  ΓÇö  Frontend
+Package
+npm install
+Purpose
+React + Vite
+npm create vite@latest my-app -- --template react-ts
+Core framework + build tool
+TailwindCSS
+npm install -D tailwindcss postcss autoprefixer
+Utility-first CSS; run npx tailwindcss init
+Shadcn/UI
+npx shadcn-ui@latest init
+Component primitives; add individual: npx shadcn-ui add button
+Radix UI
+npm install @radix-ui/react-*
+Accessible headless primitives underlying Shadcn
+Framer Motion
+npm install framer-motion
+Route transitions, card animations, streaming text
+Zustand
+npm install zustand
+Global state (user, podcast profile, active campaign)
+TanStack Query
+npm install @tanstack/react-query
+API data fetching, caching, background refetch
+Recharts
+npm install recharts
+Revenue charts, CPM trend lines, bar charts
+React Hook Form
+npm install react-hook-form
+All forms (onboarding, pitch builder, pricing inputs)
+Zod
+npm install zod
+Runtime schema validation + TypeScript inference
+Lucide React
+npm install lucide-react
+Icon system (1400+ icons, tree-shakeable)
+clsx + twMerge
+npm install clsx tailwind-merge
+Conditional className utility (cn() helper)
+React Email
+npm install react-email @react-email/components
+Pitch email template builder
+date-fns
+npm install date-fns
+Date formatting for campaign timelines
+cmdk
+npm install cmdk
+Command palette (ΓîÿK) ΓÇö inspired by Linear
+6.2  NPM Packages  ΓÇö  Backend (Python FastAPI)
+Package
+pip install
+Purpose
+FastAPI
+pip install fastapi uvicorn[standard]
+Async web framework; auto-generates OpenAPI docs
+Anthropic SDK
+pip install anthropic
+Official Claude API client; streaming support built-in
+SQLAlchemy
+pip install sqlalchemy asyncpg
+ORM for PostgreSQL; async session management
+Alembic
+pip install alembic
+Database migrations
+Celery + Redis
+pip install celery redis
+Background job queue for AI calls
+Pydantic v2
+pip install pydantic
+Request/response schema validation
+Httpx
+pip install httpx
+Async HTTP client for external API calls (RSS, Spotify)
+feedparser
+pip install feedparser
+RSS/Atom feed parsing for podcast data
+python-jose
+pip install python-jose[cryptography]
+JWT token verification (Auth0)
+boto3
+pip install boto3
+AWS S3 / Cloudflare R2 file uploads
+6.3  Fonts  ΓÇö  Download & Setup
+All fonts are from Google Fonts (free, open license). Load via Google Fonts API or self-host with fontsource.
+Font
+Role
+Weights
+Install / Link
+DM Mono
+Stats, revenue numbers, code
+400, 500
+fonts.google.com/specimen/DM+Mono  |  npm i @fontsource/dm-mono
+Syne
+Section headers, card titles
+600, 700, 800
+fonts.google.com/specimen/Syne  |  npm i @fontsource/syne
+Inter Variable
+All body copy, labels, UI
+100ΓÇô900 (variable)
+fonts.google.com/specimen/Inter  |  npm i @fontsource-variable/inter
+JetBrains Mono
+Code blocks, API keys, timestamps
+400, 700
+fonts.google.com/specimen/JetBrains+Mono  |  npm i @fontsource/jetbrains-mono
+07  DATABASE SCHEMA
+PostgreSQL with the following core tables. Prisma ORM for type-safe queries. All AI-generated content stored as JSONB for flexibility.
+Table
+Key Fields
+Type
+Notes
+users
+id, email, plan, created_at
+PostgreSQL
+Auth0 sub ID as primary key; plan: free/pro/agency
+podcasts
+id, user_id, rss_url, name, niche, monthly_downloads, audience_profile
+PostgreSQL + JSONB
+audience_profile is Claude-generated JSON: {demographics, interests, categories}
+sponsors
+id, name, category, website, estimated_budget, brand_guidelines_url, contact_email
+PostgreSQL
+Seeded from curated sponsor DB; community-contributed; Claude-enriched
+sponsor_matches
+id, podcast_id, sponsor_id, match_score, fit_rationale, safety_flags, created_at
+PostgreSQL + JSONB
+Claude outputs stored as JSONB; invalidated if podcast profile updates
+pitches
+id, podcast_id, sponsor_id, subject, body, tone, status, follow_up_sequence
+PostgreSQL + JSONB
+follow_up_sequence: [{day, subject, body}] array; status: draft/sent/opened/replied
+campaigns
+id, podcast_id, sponsor_id, start_date, end_date, placements, agreed_cpm, total_value
+PostgreSQL
+Links pitches to confirmed deals; feeds revenue dashboard
+ad_placements
+id, episode_id, timestamp_sec, slot_type, predicted_reach, revenue_est
+PostgreSQL
+Claude-generated; slot_type: pre-roll/mid-roll/post-roll
+analytics_events
+id, user_id, event_type, properties, timestamp
+TimescaleDB/JSONB
+PostHog-style events; powers usage analytics and AI cost attribution
+08  BUILD PLAN  ΓÇö  WHAT CLAUDE BUILDS
+This platform is designed to be built collaboratively with Claude (Anthropic). Below is a precise breakdown of what Claude (AI) generates vs. what the human developer configures. This is the "built with Claude" layer ΓÇö not just using AI as a feature, but using Claude to generate the entire codebase iteratively.
+8.1  What Claude AI Builds (Code Generation)
+Component
+Effort (hrs)
+Claude Prompt Strategy
+FastAPI project scaffold + folder structure
+0.5h
+"Generate a FastAPI project with the following folder structure, models, and routes for a podcast monetization SaaS..."
+All database Prisma models
+1h
+"Create Prisma schema for these 8 tables with proper relations, indexes, and enum types..."
+Anthropic API integration module
+1h
+"Build a Python module that wraps the Anthropic Claude API with retry logic, caching, streaming, and structured output parsing..."
+React component: Dashboard KPI cards
+0.5h
+"Build a React TypeScript KPI card component with animated number counter, delta indicator, and dark theme using TailwindCSS..."
+React component: Sponsor Match Card
+1h
+"Build a sponsor match card with score ring, category tags, fit rationale text, and action buttons. Animated on mount..."
+Pitch Builder three-panel layout
+2h
+"Build the three-panel pitch builder: sponsor brief form, Claude streaming output panel, email preview. Use react-hook-form, framer-motion streaming text..."
+Ad Placement Timeline Visualizer
+2h
+"Build a timeline scrubber component showing episode duration with placement zones, engagement curve overlay, and draggable markers..."
+Pricing Intelligence output UI
+1h
+"Build a 3-tier pricing card layout with animated reveal, CPM benchmark bar chart using Recharts, and export-to-PDF button..."
+Email sequence builder
+1.5h
+"Build a drag-and-drop email sequence editor with day-offset inputs, subject/body fields, and preview modal..."
+Auth flow (Clerk integration)
+1h
+"Integrate Clerk auth into FastAPI backend and React frontend. Protect all /api routes. Show user profile in sidebar..."
+Rate card PDF generator
+1.5h
+"Build a Node script that generates a branded PDF rate card using puppeteer/react-pdf from podcast profile data..."
+API endpoint tests (pytest)
+1h
+"Write pytest tests for all FastAPI routes using httpx async client. Mock Anthropic API responses..."
+8.2  Estimated Build Timeline
+Sprint
+Focus
+Deliverables
+Duration
+Sprint 1
+Foundation
+Project setup, auth, DB schema, FastAPI scaffold, React Vite + Tailwind + Shadcn, deploy to Railway/Vercel
+1 week
+Sprint 2
+Core AI
+Claude API module, sponsor matching endpoint, audience profile analysis, sponsor match UI + cards
+1.5 weeks
+Sprint 3
+Pitch Engine
+Pitch builder UI, Claude pitch generation with streaming, follow-up sequence, email preview + send
+1.5 weeks
+Sprint 4
+Analytics & Pricing
+Ad placement analyzer, timeline UI, pricing intelligence tool, CPM benchmark charts, rate card export
+1 week
+Sprint 5
+Dashboard & Polish
+Home dashboard, KPI strip, revenue chart, campaign tracker, onboarding flow, mobile responsiveness
+1 week
+Sprint 6
+Launch Prep
+Stripe billing (Starter $29/mo, Pro $79/mo, Agency $199/mo), production hardening, Sentry, docs, landing page
+1 week
+09  PLATFORM MONETIZATION
+≡ƒƒó  Starter
+$29 / month
+≡ƒö╡  Pro
+$79 / month
+≡ƒƒú  Agency
+$199 / month
+REVENUE PROJECTION (Conservative)
+100 Starter users ├ù $29 = $2,900/mo  |  50 Pro users ├ù $79 = $3,950/mo  |  10 Agency ├ù $199 = $1,990/mo
+Total MRR at these numbers: $8,840/month  ΓåÆ  ~$106K ARR  ΓÇö  Achievable with focused content marketing to mid-size podcasters.
+10  QUICK START  ΓÇö  HOW TO BUILD THIS NOW
+Follow these steps in order. Use Claude to generate code at each step. Paste the prompt into Claude, review output, iterate.
+Step-by-Step with Claude Prompts
+Clone the Vite React + TypeScript template:  npm create vite@latest podmonetize -- --template react-ts  then install deps: tailwindcss, shadcn, zustand, react-query, framer-motion, recharts, lucide-react
+Set up FastAPI backend: pip install fastapi uvicorn anthropic sqlalchemy asyncpg alembic celery redis feedparser pydantic. Ask Claude: "Generate FastAPI folder structure for a SaaS with auth, podcast ingestion, Claude AI routes, and Stripe billing."
+Get Anthropic API key at console.anthropic.com ΓåÆ set as ANTHROPIC_API_KEY env variable ΓåÆ Ask Claude: "Write a Python module using the Anthropic SDK that calls Claude claude-sonnet-4, supports streaming, retries, and parses JSON output for sponsor matching."
+Set up PostgreSQL (local via Docker or Railway) ΓåÆ Ask Claude: "Write a Prisma schema for users, podcasts, sponsors, sponsor_matches, pitches, campaigns, ad_placements based on these field descriptions: [paste Section 7 above]"
+Build the React Dashboard ΓåÆ Ask Claude: "Build a dark-theme React dashboard with TailwindCSS: sidebar nav, 4 KPI cards with animated numbers, area chart with Recharts for revenue, and a sponsor pipeline Kanban column."
+Build each screen ΓåÆ paste the relevant screen spec from Section 5 into Claude: "Build this React screen according to this specification: [paste screen spec]. Use Shadcn/UI components, TailwindCSS, DM Mono for numbers, Syne for headers."
+Deploy: frontend to Vercel (connect GitHub repo ΓåÆ auto-deploy). Backend to Railway (Dockerfile or Python environment ΓåÆ set env vars ΓåÆ deploy). Database to Railway PostgreSQL (free tier to start).
+Add Stripe billing: npm install stripe @stripe/stripe-js ΓåÆ Ask Claude: "Integrate Stripe Checkout into FastAPI and React for 3 subscription tiers with usage-based AI call limits."
+FINAL NOTE: BUILD ORDER PRINCIPLE
+Start with the AI pipeline (Claude integration) first ΓÇö it is the core value prop. If Claude can match sponsors and generate pitches, everything else is display logic. Build one screen, show it to 3 real podcasters, collect feedback, then expand. The fastest path to $500 MRR is a working pitch generator ΓÇö even if the dashboard is ugly.
+PODMONETIZE AI
+System Design Document  ┬╖  Version 1.0  ┬╖  Built to be built with Claude

@@ -1,0 +1,12 @@
+{
+  "name": "podcast-monetization-frontend",
+  "version": "1.0.0",
+  "description": "PodMonetize — AI-powered podcast sponsorship engine frontend",
+  "scripts": {
+    "dev": "npx serve public -p 3000 --cors",
+    "start": "npx serve public -p 3000"
+  },
+  "devDependencies": {
+    "serve": "^14.2.3"
+  }
+}
