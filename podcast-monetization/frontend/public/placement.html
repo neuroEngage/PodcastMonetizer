@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ad Placement — PodMonetize AI</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <span class="logo-icon">🎙</span>
+        <div class="logo-info"><div class="logo-name">PodMonetize</div><div class="logo-sub">v2.0 Command Center</div></div>
+      </div>
+      <div class="podcast-switcher" id="podcast-name-display">My Podcast</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="app.html" class="nav-link"><span class="nav-icon">📊</span> <span class="nav-text">Dashboard</span></a>
+      <a href="sponsors.html" class="nav-link"><span class="nav-icon">🎯</span> <span class="nav-text">Sponsor Finder</span></a>
+      <a href="pitch.html" class="nav-link"><span class="nav-icon">✉️</span> <span class="nav-text">Pitch Builder</span></a>
+      <a href="placement.html" class="nav-link active"><span class="nav-icon">📍</span> <span class="nav-text">Ad Placement</span></a>
+      <a href="pricing.html" class="nav-link"><span class="nav-icon">💰</span> <span class="nav-text">Pricing Tool</span></a>
+      <div class="nav-divider"></div>
+      <a href="setup.html" class="nav-link"><span class="nav-icon">⚙️</span> <span class="nav-text">Setup</span></a>
+    </nav>
+  </aside>
+
+  <main class="main" id="main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Ad Placement</h1>
+        <p class="page-sub">AI-identified optimal timestamps for sponsor integrations.</p>
+      </div>
+    </div>
+
+    <div id="placement-empty" class="surface-card empty-state" style="padding:60px">
+      <div class="empty-icon">📍</div>
+      <div class="empty-text">No ad breaks identified.</div>
+      <div class="empty-sub">Run a transcript analysis in <strong>Setup</strong> to see recommended placements.</div>
+      <a href="setup.html" class="btn-accent" style="text-decoration:none">Start Setup →</a>
+    </div>
+
+    <div id="placement-content" style="display:none">
+       <div class="surface-card">
+         <div class="card-title">Episode Timeline</div>
+         <div class="timeline-bar"><div class="timeline-track" id="timeline-track"></div></div>
+         <div class="timeline-legend">
+           <div class="legend-item"><div class="legend-dot high"></div> High Engagement</div>
+           <div class="legend-item"><div class="legend-dot medium"></div> Medium</div>
+           <div class="legend-item"><div class="legend-dot low"></div> Low</div>
+         </div>
+       </div>
+       <div class="placement-cards" id="placement-cards"></div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (analysisResult && analysisResult.ad_breaks) updateAdPlacement();
+    });
+  </script>
+</body>
+</html>

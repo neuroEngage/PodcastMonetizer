@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing Tool — PodMonetize AI</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <span class="logo-icon">🎙</span>
+        <div class="logo-info"><div class="logo-name">PodMonetize</div><div class="logo-sub">v2.0 Command Center</div></div>
+      </div>
+      <div class="podcast-switcher" id="podcast-name-display">My Podcast</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="app.html" class="nav-link"><span class="nav-icon">📊</span> <span class="nav-text">Dashboard</span></a>
+      <a href="sponsors.html" class="nav-link"><span class="nav-icon">🎯</span> <span class="nav-text">Sponsor Finder</span></a>
+      <a href="pitch.html" class="nav-link"><span class="nav-icon">✉️</span> <span class="nav-text">Pitch Builder</span></a>
+      <a href="placement.html" class="nav-link"><span class="nav-icon">📍</span> <span class="nav-text">Ad Placement</span></a>
+      <a href="pricing.html" class="nav-link active"><span class="nav-icon">💰</span> <span class="nav-text">Pricing Tool</span></a>
+      <div class="nav-divider"></div>
+      <a href="setup.html" class="nav-link"><span class="nav-icon">⚙️</span> <span class="nav-text">Setup</span></a>
+    </nav>
+  </aside>
+
+  <main class="main" id="main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Pricing Tool</h1>
+        <p class="page-sub">Calculate your podcast's worth based on niche benchmarks.</p>
+      </div>
+    </div>
+
+    <div id="pricing-empty" class="surface-card empty-state" style="padding:40px">
+      <div class="empty-icon">💰</div>
+      <div class="empty-text">ROI Calculator</div>
+      <div class="empty-sub">Calculate your worth. Use the calculator below or run an analysis.</div>
+      <button class="btn-accent" onclick="showManualPricing()">Open Manual Calculator</button>
+    </div>
+
+    <div id="pricing-content" style="display:none">
+       <div class="pricing-three-col">
+         <div class="surface-card pricing-tier"><div class="tier-badge ghost-badge">Floor</div><div class="tier-price dm-mono" id="pt-floor">$0</div><div class="tier-desc">Minimum baseline ask</div></div>
+         <div class="surface-card pricing-tier featured-tier"><div class="tier-badge accent-badge">Recommended</div><div class="tier-price dm-mono accent" id="pt-rec">$0</div><div class="tier-desc">Optimal market rate</div></div>
+         <div class="surface-card pricing-tier"><div class="tier-badge highlight-badge">Ceiling</div><div class="tier-price dm-mono" id="pt-ceiling">$0</div><div class="tier-desc">Premium exclusive deal</div></div>
+       </div>
+
+       <div class="surface-card calculator-card">
+         <div class="card-title">Interactive Revenue Calculator</div>
+         <div class="calc-row">
+           <div class="calc-field"><label class="field-label">Adjust CPM ($)</label><div class="slider-wrap"><input type="range" id="pt-cpm-slider" min="10" max="100" value="30" oninput="recalcPricing()"><span class="slider-val" id="pt-cpm-val">$30</span></div></div>
+           <div class="calc-field"><label class="field-label">Episodes / Mo</label><div class="slider-wrap"><input type="range" id="pt-eps-slider" min="1" max="12" value="4" oninput="recalcPricing()"><span class="slider-val" id="pt-eps-val">4</span></div></div>
+           <div class="calc-field toggle-field"><label class="field-label">Exclusive</label><button class="btn-toggle" id="pt-excl-toggle" onclick="toggleExcl()">OFF</button></div>
+         </div>
+       </div>
+
+       <div class="surface-card"><div class="card-title">CPM Breakdown</div><div class="cpm-table" id="cpm-table"></div></div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (audienceData) updatePricingEmpty();
+      else showManualPricing();
+    });
+  </script>
+</body>
+</html>

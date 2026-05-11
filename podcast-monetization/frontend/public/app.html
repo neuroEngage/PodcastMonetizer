@@ -16,43 +16,49 @@
   <div class="sidebar-header">
     <div class="sidebar-logo">
       <span class="logo-icon">🎙</span>
-      <div>
+      <div class="logo-info">
         <div class="logo-name">PodMonetize</div>
-        <div class="logo-sub">AI Sponsorship Engine</div>
+        <div class="logo-sub">v2.0 Command Center</div>
       </div>
     </div>
-    <div class="podcast-switcher" id="podcast-name-display">My Podcast</div>
+    <div class="podcast-switcher" id="podcast-name-display" onclick="toggleSidebar()">My Podcast</div>
   </div>
 
   <nav class="sidebar-nav">
-    <a class="nav-link active" id="nav-dashboard" onclick="showScreen('dashboard')">
-      <span class="nav-icon">📊</span> Dashboard
+    <a href="app.html" class="nav-link active" id="nav-dashboard">
+      <span class="nav-icon">📊</span> <span class="nav-text">Dashboard</span>
     </a>
-    <a class="nav-link" id="nav-sponsors" onclick="showScreen('sponsors')">
-      <span class="nav-icon">🎯</span> Sponsor Finder
+    <a href="sponsors.html" class="nav-link" id="nav-sponsors">
+      <span class="nav-icon">🎯</span> <span class="nav-text">Sponsor Finder</span>
     </a>
-    <a class="nav-link" id="nav-pitch" onclick="showScreen('pitch')">
-      <span class="nav-icon">✉️</span> Pitch Builder
+    <a href="pitch.html" class="nav-link" id="nav-pitch">
+      <span class="nav-icon">✉️</span> <span class="nav-text">Pitch Builder</span>
     </a>
-    <a class="nav-link" id="nav-placement" onclick="showScreen('placement')">
-      <span class="nav-icon">📍</span> Ad Placement
+    <a href="placement.html" class="nav-link" id="nav-placement">
+      <span class="nav-icon">📍</span> <span class="nav-text">Ad Placement</span>
     </a>
-    <a class="nav-link" id="nav-pricing" onclick="showScreen('pricing')">
-      <span class="nav-icon">💰</span> Pricing Tool
+    <a href="pricing.html" class="nav-link" id="nav-pricing">
+      <span class="nav-icon">💰</span> <span class="nav-text">Pricing Tool</span>
     </a>
     <div class="nav-divider"></div>
-    <a class="nav-link" id="nav-setup" onclick="showScreen('setup')">
-      <span class="nav-icon">⚙️</span> Setup
+    <a href="setup.html" class="nav-link" id="nav-setup">
+      <span class="nav-icon">⚙️</span> <span class="nav-text">Setup</span>
     </a>
   </nav>
 
   <div class="sidebar-footer">
+    <div class="user-profile">
+      <div class="user-avatar">SC</div>
+      <div class="user-info">
+        <div class="user-name">Sarah Chen</div>
+        <div class="user-plan">Pro Plan</div>
+      </div>
+    </div>
     <div class="usage-row" id="usage-row" style="display:none">
       <div class="usage-label">AI Spend (Session)</div>
       <div class="usage-val" id="sidebar-cost">$0.00</div>
-      <div class="usage-label"><span id="sidebar-calls">0</span> calls · claude-sonnet-4</div>
+      <div class="usage-label"><span id="sidebar-calls">0</span> calls</div>
     </div>
-    <div class="plan-badge">🟢 Starter Plan</div>
   </div>
 </aside>
 
@@ -68,7 +74,7 @@
       </div>
       <div style="display: flex; gap: 12px;">
         <button class="btn-ghost" onclick="exportPDF()" id="btn-export-pdf" style="display:none">📥 Export PDF</button>
-        <button class="btn-accent" onclick="showScreen('setup')">+ New Analysis</button>
+        <a href="setup.html" class="btn-accent" style="text-decoration:none">+ New Analysis</a>
       </div>
     </div>
 
@@ -96,9 +102,10 @@
       </div>
     </div>
 
-    <!-- Two cols: AI Actions + Pipeline -->
-    <div class="dash-two-col">
-      <div class="surface-card" id="ai-actions-card">
+    <!-- Dashboard Grid -->
+    <div class="dash-grid">
+      <!-- AI Actions -->
+      <div class="surface-card col-8" id="ai-actions-card">
         <div class="card-title">⚡ AI Actions</div>
         <div id="ai-actions-body" class="empty-state">
           <div class="empty-icon">🎙</div>
@@ -108,66 +115,88 @@
         </div>
       </div>
 
-      <div class="surface-card" id="pipeline-card">
+      <!-- Sponsor Pipeline -->
+      <div class="surface-card col-4" id="pipeline-card">
         <div class="card-title">🤝 Sponsor Pipeline</div>
         <div id="pipeline-body" class="empty-state">
           <div class="empty-icon">📭</div>
           <div class="empty-text">No sponsors matched yet.</div>
-          <div class="empty-sub">Run the AI pipeline to see matched sponsors.</div>
+          <div class="empty-sub">Run AI pipeline to see matched sponsors.</div>
         </div>
       </div>
-    </div>
 
-    <!-- Revenue chart area -->
-    <div class="surface-card">
-      <div class="card-title">📈 Revenue Projection</div>
-      <div id="revenue-chart-area" class="chart-placeholder">
-        <div class="chart-bars" id="chart-bars"></div>
-        <div id="chart-empty" class="empty-state" style="padding:32px 0">
-          <div class="empty-icon">📈</div>
-          <div class="empty-text">Revenue chart loads after analysis.</div>
+      <!-- Revenue chart area -->
+      <div class="surface-card col-12">
+        <div class="card-title">📈 Revenue Projection</div>
+        <div id="revenue-chart-area" class="chart-placeholder">
+          <div class="chart-bars" id="chart-bars"></div>
+          <div id="chart-empty" class="empty-state" style="padding:32px 0">
+            <div class="empty-icon">📈</div>
+            <div class="empty-text">Revenue chart loads after analysis.</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══ SCREEN: Setup ══════════════════════════════════════════════════════ -->
+  <!-- ══ SCREEN: Setup (The Runway) ═════════════════════════════════════════ -->
   <div class="screen" id="screen-setup">
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">Setup</h1>
-        <p class="page-sub">Configure your podcast profile and run the AI analysis pipeline.</p>
-      </div>
-    </div>
-
-    <div class="setup-grid">
-      <!-- Profile card -->
-      <div class="surface-card">
-        <div class="card-title">📻 Podcast Profile</div>
-        <div class="form-row">
-          <div class="field">
-            <label class="field-label">Podcast Name</label>
-            <input class="input" id="f-name" type="text" placeholder="The Business Breakdown" />
-          </div>
-          <div class="field">
-            <label class="field-label">Category</label>
-            <select class="input" id="f-cat">
-              <option>Business</option><option>Finance</option><option>Technology</option>
-              <option>Education</option><option>Health &amp; Wellness</option>
-              <option>True Crime</option><option>Comedy</option><option>News</option>
-              <option>Sports</option><option>Science</option><option>Society &amp; Culture</option>
-            </select>
-          </div>
+    <div class="runway-container">
+      <!-- Onboarding Stepper -->
+      <div class="runway-stepper" id="runway-stepper">
+        <div class="step active" data-step="1">
+          <div class="step-node">1</div>
+          <div class="step-label">Show</div>
         </div>
-        <div class="form-row">
-          <div class="field">
-            <label class="field-label">Avg Listeners / Episode</label>
-            <input class="input" id="f-listeners" type="number" placeholder="18000" />
+        <div class="step-line"></div>
+        <div class="step" data-step="2">
+          <div class="step-node">2</div>
+          <div class="step-label">Audience</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" data-step="3">
+          <div class="step-node">3</div>
+          <div class="step-label">Ambition</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" data-step="4">
+          <div class="step-node">4</div>
+          <div class="step-label">Connect</div>
+        </div>
+      </div>
+
+      <!-- Step 1: Show Identity -->
+      <div class="runway-card active" id="runway-step-1">
+        <h2 class="space-grotesk">Show Identity</h2>
+        <p class="muted">Tell us about your podcast's core brand.</p>
+        <div class="field">
+          <label class="field-label">Podcast Name</label>
+          <input class="input" id="f-name" type="text" placeholder="The Business Breakdown" />
+        </div>
+        <div class="field">
+          <label class="field-label">Category</label>
+          <div class="pill-grid">
+            <div class="pill-chip active" onclick="selectPill(this, 'f-cat', 'Business')">Business</div>
+            <div class="pill-chip" onclick="selectPill(this, 'f-cat', 'Technology')">Technology</div>
+            <div class="pill-chip" onclick="selectPill(this, 'f-cat', 'Finance')">Finance</div>
+            <div class="pill-chip" onclick="selectPill(this, 'f-cat', 'Health')">Health</div>
+            <div class="pill-chip" onclick="selectPill(this, 'f-cat', 'News')">News</div>
+            <div class="pill-chip" onclick="selectPill(this, 'f-cat', 'True Crime')">True Crime</div>
           </div>
-          <div class="field">
-            <label class="field-label">Episodes / Month</label>
-            <input class="input" id="f-eps" type="number" placeholder="4" />
-          </div>
+          <input type="hidden" id="f-cat" value="Business" />
+        </div>
+        <div class="runway-actions">
+          <button class="btn-accent large" onclick="nextRunwayStep(2)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Audience Snapshot -->
+      <div class="runway-card" id="runway-step-2">
+        <h2 class="space-grotesk">Audience Snapshot</h2>
+        <p class="muted">Who is listening to your show?</p>
+        <div class="field">
+          <label class="field-label">Avg Listeners / Episode</label>
+          <input class="input" id="f-listeners" type="number" placeholder="18000" />
         </div>
         <div class="form-row">
           <div class="field">
@@ -178,115 +207,101 @@
             <label class="field-label">Age 35–54 %</label>
             <input class="input" id="f-age2" type="number" placeholder="48" />
           </div>
-          <div class="field">
-            <label class="field-label">Gender Split</label>
-            <input class="input" id="f-gender" type="text" placeholder="58% M, 42% F" />
-          </div>
         </div>
-        <div class="form-row">
-          <div class="field">
-            <label class="field-label">Current Monthly Revenue ($)</label>
-            <input class="input" id="f-rev" type="number" placeholder="800" />
-          </div>
-          <div class="field">
-            <label class="field-label">Top Geography</label>
-            <input class="input" id="f-geo" type="text" placeholder="US" />
-          </div>
-        </div>
-        <div class="quick-fill">
-          <button class="btn-ghost small" onclick="loadSample()">🎲 Load Sample Show</button>
+        <div class="runway-actions">
+          <button class="btn-ghost" onclick="nextRunwayStep(1)">← Back</button>
+          <button class="btn-accent large" onclick="nextRunwayStep(3)">Continue →</button>
         </div>
       </div>
 
-      <!-- Transcript card -->
-      <div class="surface-card">
-        <div class="card-title-row">
-          <div class="card-title">📝 Episode Transcript</div>
-          <div class="row-right">
-            <span class="mono-badge" id="wc-badge">0 words</span>
-            <button class="btn-ghost small" onclick="loadSampleTx()">Load Sample</button>
+      <!-- Step 3: Revenue Ambition -->
+      <div class="runway-card" id="runway-step-3">
+        <h2 class="space-grotesk">Revenue Ambition</h2>
+        <p class="muted">What is your monthly sponsorship goal?</p>
+        <div class="ambition-grid">
+          <div class="ambition-card active" onclick="selectAmbition(this, 500)">
+            <div class="amb-val">$500/mo</div>
+            <div class="amb-label">Just Starting</div>
+          </div>
+          <div class="ambition-card" onclick="selectAmbition(this, 5000)">
+            <div class="amb-val">$5,000/mo</div>
+            <div class="amb-label">Growing</div>
+          </div>
+          <div class="ambition-card" onclick="selectAmbition(this, 25000)">
+            <div class="amb-val">$25,000/mo</div>
+            <div class="amb-label">Scaling</div>
           </div>
         </div>
+        <input type="hidden" id="f-rev-goal" value="500" />
+        <div class="runway-actions">
+          <button class="btn-ghost" onclick="nextRunwayStep(2)">← Back</button>
+          <button class="btn-accent large" onclick="nextRunwayStep(4)">Continue →</button>
+        </div>
+      </div>
 
-        <!-- URL fetch row -->
+      <!-- Step 4: Connect Episode -->
+      <div class="runway-card" id="runway-step-4">
+        <h2 class="space-grotesk">Connect Episode</h2>
+        <p class="muted">Provide a transcript or link to begin analysis.</p>
         <div class="url-fetch-row">
-          <div class="url-fetch-icon">🔗</div>
-          <input
-            class="input url-input"
-            id="f-url"
-            type="url"
-            placeholder="Paste a YouTube link — https://youtu.be/... or https://youtube.com/watch?v=..."
-          />
-          <button class="btn-fetch" id="fetch-btn" onclick="fetchTranscript()">
-            <span id="fetch-btn-text">Fetch Transcript</span>
-          </button>
+          <input class="url-input" id="f-yt-url" type="text" placeholder="Paste YouTube URL..." />
+          <button class="btn-fetch" onclick="fetchYTTranscript()">Fetch</button>
         </div>
-        <div class="url-hint">Or paste the transcript manually below ↓</div>
-        <div id="fetch-status" class="fetch-status" style="display:none"></div>
-
-        <textarea class="tx-area" id="f-tx" placeholder="Paste your episode transcript here..."></textarea>
-      </div>
-    </div>
-
-    <!-- Pipeline button -->
-    <div class="run-pipeline-row">
-      <div class="pipeline-info">
-        <div class="pipeline-info-title">5-Stage AI Pipeline</div>
-        <div class="pipeline-info-stages">
-          <span class="stage-pill">📝 Transcript</span>
-          <span class="stage-arrow">→</span>
-          <span class="stage-pill">👥 Audience</span>
-          <span class="stage-arrow">→</span>
-          <span class="stage-pill">🤝 Sponsors</span>
-          <span class="stage-arrow">→</span>
-          <span class="stage-pill">💰 Pricing</span>
-          <span class="stage-arrow">→</span>
-          <span class="stage-pill">✉️ Pitch</span>
+        <div class="field">
+          <div class="field-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px;">
+            <label class="field-label" style="margin-bottom: 0;">Or Paste Transcript</label>
+            <div class="field-actions" style="display: flex; gap: 8px; align-items: center;">
+              <span class="mono-badge" id="wc-badge" style="font-size: 10px; padding: 2px 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px;">0 words</span>
+              <button class="btn-ghost small" onclick="loadSampleTx()" style="padding: 2px 8px; font-size: 10px;">Load Sample</button>
+            </div>
+          </div>
+          <textarea class="tx-area" id="f-transcript" placeholder="Paste your transcript here..."></textarea>
         </div>
-      </div>
-      <button class="btn-accent large" id="run-btn" onclick="runPipeline()">
-        ⚡ Run AI Analysis
-      </button>
-    </div>
-
-    <!-- Pipeline progress -->
-    <div id="pipeline-progress" style="display:none">
-      <div class="surface-card">
-        <div class="card-title">Pipeline Progress</div>
-        <div class="stages-row">
-          <div class="stage-box" id="stg-1">
-            <div class="stg-icon">📝</div>
-            <div class="stg-name">Transcript</div>
-            <div class="stg-status">—</div>
-          </div>
-          <div class="stage-connector"></div>
-          <div class="stage-box" id="stg-2">
-            <div class="stg-icon">👥</div>
-            <div class="stg-name">Audience</div>
-            <div class="stg-status">—</div>
-          </div>
-          <div class="stage-connector"></div>
-          <div class="stage-box" id="stg-3">
-            <div class="stg-icon">🤝</div>
-            <div class="stg-name">Sponsors</div>
-            <div class="stg-status">—</div>
-          </div>
-          <div class="stage-connector"></div>
-          <div class="stage-box" id="stg-4">
-            <div class="stg-icon">💰</div>
-            <div class="stg-name">Pricing</div>
-            <div class="stg-status">—</div>
-          </div>
+        <div class="runway-actions">
+          <button class="btn-ghost" onclick="nextRunwayStep(3)">← Back</button>
+          <button class="btn-accent large" id="btn-run-analysis" onclick="runFullPipeline()">Launch Analysis 🚀</button>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Error -->
-    <div id="setup-error" class="error-banner" style="display:none">
-      <span class="error-icon">⚠</span>
-      <span id="setup-error-msg">Error.</span>
-      <button class="btn-ghost small" onclick="document.getElementById('setup-error').style.display='none'">✕</button>
+  <!-- ══ SCREEN: Analysis Progress (The Runway) ═════════════════════════════ -->
+  <div class="screen" id="screen-analysis">
+    <div class="analysis-runway">
+      <div class="wave-pulse"></div>
+      <h2 class="space-grotesk">Analyzing Episode...</h2>
+      <p class="muted" id="analysis-status">Parsing transcript and identifying themes...</p>
+      
+      <div class="pipeline-strip">
+        <div class="pipeline-node done" id="node-1">
+          <div class="node-circle">✓</div>
+          <div class="node-label">Parse</div>
+        </div>
+        <div class="pipeline-connector done"></div>
+        <div class="pipeline-node running" id="node-2">
+          <div class="node-circle">2</div>
+          <div class="node-label">Slots</div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-node" id="node-3">
+          <div class="node-circle">3</div>
+          <div class="node-label">Profile</div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-node" id="node-4">
+          <div class="node-circle">4</div>
+          <div class="node-label">Match</div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-node" id="node-5">
+          <div class="node-circle">5</div>
+          <div class="node-label">Price</div>
+        </div>
+      </div>
+      <div class="est-timer">Est. <span id="est-time">45</span>s remaining</div>
     </div>
+  </div>
+
   </div>
 
   <!-- ══ SCREEN: Sponsor Finder ════════════════════════════════════════════ -->
@@ -312,27 +327,64 @@
       </div>
     </div>
 
-    <!-- Audience intel strip -->
-    <div class="intel-strip" id="intel-strip" style="display:none">
-      <div class="intel-item">
-        <div class="intel-label">Audience Persona</div>
-        <div class="intel-val" id="intel-persona">—</div>
+    <!-- Filters Strip -->
+    <div class="filter-strip surface-card">
+      <div class="filter-group">
+        <label>Filter Category</label>
+        <select id="sp-filter-cat" onchange="filterSponsors()">
+          <option value="all">All Categories</option>
+          <option value="Productivity Software">Productivity</option>
+          <option value="Online Learning">Education</option>
+          <option value="Professional Network">Business</option>
+          <option value="VPN Service">Security</option>
+          <option value="Accounting Software">Finance</option>
+        </select>
       </div>
-      <div class="intel-item">
-        <div class="intel-label">Purchase Intent</div>
-        <div class="intel-tags" id="intel-intent"></div>
+      <div class="filter-group">
+        <label>Sort By</label>
+        <select id="sp-sort" onchange="filterSponsors()">
+          <option value="score">Fit Score (High to Low)</option>
+          <option value="value">Deal Value (High to Low)</option>
+        </select>
       </div>
-      <div class="intel-item">
-        <div class="intel-label">Ideal Verticals</div>
-        <div class="intel-tags" id="intel-verticals"></div>
+      <div class="filter-group search">
+        <label>Search Market</label>
+        <input type="text" id="sp-search" placeholder="Search 30+ brands..." oninput="filterSponsors()" />
       </div>
     </div>
 
-    <div id="sponsors-empty" class="surface-card empty-state" style="padding:60px">
+    <!-- Market Intelligence (Always Visible) -->
+    <div class="intel-strip" id="intel-strip">
+      <div class="intel-item">
+        <div class="intel-label">Market Status</div>
+        <div class="intel-val" id="intel-persona">Analyzing market benchmarks...</div>
+      </div>
+      <div class="intel-item">
+        <div class="intel-label">Trending Categories</div>
+        <div class="intel-tags" id="intel-intent">
+          <span class="intel-tag">B2B SaaS</span>
+          <span class="intel-tag">EdTech</span>
+          <span class="intel-tag">FinTech</span>
+        </div>
+      </div>
+      <div class="intel-item">
+        <div class="intel-label">Active Sponsors</div>
+        <div class="intel-tags" id="intel-verticals">
+          <span class="intel-tag">Shopify</span>
+          <span class="intel-tag">Notion</span>
+          <span class="intel-tag">LinkedIn</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="sponsors-empty" class="surface-card empty-state" style="padding:40px; margin-top: 20px;">
       <div class="empty-icon">🎯</div>
-      <div class="empty-text">No sponsors matched yet.</div>
-      <div class="empty-sub">Run the AI Analysis in <strong>Setup</strong> to find matched sponsors.</div>
-      <button class="btn-accent" onclick="showScreen('setup')">Run Analysis →</button>
+      <div class="empty-text">Discover Potential Sponsors</div>
+      <div class="empty-sub">We've pre-loaded 30+ top podcast sponsors. Click below to see the full market list or run an AI analysis for personalized matching.</div>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="btn-ghost" onclick="showAllSponsors()">View All Sponsors</button>
+        <button class="btn-accent" onclick="showScreen('setup')">Run AI Matching →</button>
+      </div>
     </div>
 
     <div id="sponsors-grid" class="sponsor-grid" style="display:none"></div>
@@ -347,11 +399,32 @@
       </div>
     </div>
 
-    <div id="pitch-empty" class="surface-card empty-state" style="padding:60px">
+    <div id="pitch-empty" class="surface-card empty-state" style="padding:40px">
       <div class="empty-icon">✉️</div>
-      <div class="empty-text">No pitch generated yet.</div>
-      <div class="empty-sub">Go to <strong>Sponsor Finder</strong> and click "Generate Pitch" on a match.</div>
-      <button class="btn-accent" onclick="showScreen('sponsors')">View Sponsors →</button>
+      <div class="empty-text">Draft Your First Pitch</div>
+      <div class="empty-sub">You can generate a pitch automatically from the <strong>Sponsor Finder</strong> or create a manual draft below.</div>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="btn-ghost" onclick="showManualPitchForm()">Create Manual Draft</button>
+        <button class="btn-accent" onclick="showScreen('sponsors')">Find Sponsors →</button>
+      </div>
+    </div>
+
+    <!-- Manual Pitch Form (Hidden by default) -->
+    <div id="manual-pitch-form" class="surface-card" style="display:none; max-width: 600px; margin: 0 auto;">
+       <div class="card-title">Manual Pitch Configuration</div>
+       <div class="field">
+         <label class="field-label">Target Sponsor Name</label>
+         <input type="text" id="m-sponsor-name" class="input" placeholder="e.g. Shopify" />
+       </div>
+       <div class="field">
+         <label class="field-label">Sponsor Category</label>
+         <input type="text" id="m-sponsor-cat" class="input" placeholder="e.g. eCommerce" />
+       </div>
+       <div class="field">
+         <label class="field-label">The "Hook" (Why they should sponsor you)</label>
+         <textarea id="m-hook" class="input" style="height: 80px;" placeholder="e.g. My audience is 40% small business owners looking for better checkout tools."></textarea>
+       </div>
+       <button class="btn-accent large" onclick="generateManualPitch()">Generate AI Pitch →</button>
     </div>
 
     <div id="pitch-builder" style="display:none">
@@ -456,11 +529,14 @@
       </div>
     </div>
 
-    <div id="pricing-empty" class="surface-card empty-state" style="padding:60px">
+    <div id="pricing-empty" class="surface-card empty-state" style="padding:40px">
       <div class="empty-icon">💰</div>
-      <div class="empty-text">No pricing data yet.</div>
-      <div class="empty-sub">Run the AI Analysis in <strong>Setup</strong> to generate pricing intelligence.</div>
-      <button class="btn-accent" onclick="showScreen('setup')">Run Analysis →</button>
+      <div class="empty-text">Sponsorship Value Calculator</div>
+      <div class="empty-sub">Calculate your podcast's worth. Use the manual calculator below or run an AI analysis for verified market rates.</div>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="btn-ghost" onclick="showManualPricing()">Open Manual Calculator</button>
+        <button class="btn-accent" onclick="showScreen('setup')">Get Market Rates →</button>
+      </div>
     </div>
 
     <div id="pricing-content" style="display:none">
@@ -483,6 +559,31 @@
           <div class="tier-price dm-mono" id="pt-ceiling">—</div>
           <div class="tier-label">/ month</div>
           <div class="tier-desc">Exclusive deal · premium ask</div>
+        </div>
+      </div>
+
+      <!-- Pricing Calculator -->
+      <div class="surface-card calculator-card">
+        <div class="card-title">Interactive Revenue Calculator</div>
+        <div class="calc-row">
+          <div class="calc-field">
+            <label class="field-label">Adjust CPM ($)</label>
+            <div class="slider-wrap">
+              <input type="range" id="pt-cpm-slider" min="10" max="100" step="1" value="30" oninput="recalcPricing()">
+              <span class="slider-val" id="pt-cpm-val">$30</span>
+            </div>
+          </div>
+          <div class="calc-field">
+            <label class="field-label">Episodes / Mo</label>
+            <div class="slider-wrap">
+              <input type="range" id="pt-eps-slider" min="1" max="12" step="1" value="4" oninput="recalcPricing()">
+              <span class="slider-val" id="pt-eps-val">4</span>
+            </div>
+          </div>
+          <div class="calc-field toggle-field">
+            <label class="field-label">Exclusive Premium</label>
+            <button class="btn-toggle" id="pt-excl-toggle" onclick="toggleExcl()">OFF</button>
+          </div>
         </div>
       </div>
 
@@ -509,6 +610,7 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="EditorBridge.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

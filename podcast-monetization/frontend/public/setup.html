@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup — PodMonetize AI</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <span class="logo-icon">🎙</span>
+        <div class="logo-info"><div class="logo-name">PodMonetize</div><div class="logo-sub">v2.0 Command Center</div></div>
+      </div>
+      <div class="podcast-switcher" id="podcast-name-display">My Podcast</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="app.html" class="nav-link"><span class="nav-icon">📊</span> <span class="nav-text">Dashboard</span></a>
+      <a href="sponsors.html" class="nav-link"><span class="nav-icon">🎯</span> <span class="nav-text">Sponsor Finder</span></a>
+      <a href="pitch.html" class="nav-link"><span class="nav-icon">✉️</span> <span class="nav-text">Pitch Builder</span></a>
+      <a href="placement.html" class="nav-link"><span class="nav-icon">📍</span> <span class="nav-text">Ad Placement</span></a>
+      <a href="pricing.html" class="nav-link"><span class="nav-icon">💰</span> <span class="nav-text">Pricing Tool</span></a>
+      <div class="nav-divider"></div>
+      <a href="setup.html" class="nav-link active"><span class="nav-icon">⚙️</span> <span class="nav-text">Setup</span></a>
+    </nav>
+  </aside>
+
+  <main class="main" id="main">
+    <!-- Analysis Screen (hidden by default) -->
+    <div id="screen-analysis" class="screen" style="display:none">
+       <div class="analysis-runway">
+         <div class="wave-pulse"></div>
+         <h2 class="page-title">Analyzing Your Episode</h2>
+         <p id="analysis-status" class="page-sub">Starting AI engine...</p>
+         <div class="pipeline-strip">
+           <div class="pipeline-node" id="node-1"><div class="node-circle">1</div><div class="node-label">Parse</div></div>
+           <div class="pipeline-connector" id="conn-1"></div>
+           <div class="pipeline-node" id="node-2"><div class="node-circle">2</div><div class="node-label">Breaks</div></div>
+           <div class="pipeline-connector" id="conn-2"></div>
+           <div class="pipeline-node" id="node-3"><div class="node-circle">3</div><div class="node-label">Audience</div></div>
+           <div class="pipeline-connector" id="conn-3"></div>
+           <div class="pipeline-node" id="node-4"><div class="node-circle">4</div><div class="node-label">Match</div></div>
+           <div class="pipeline-connector" id="conn-4"></div>
+           <div class="pipeline-node" id="node-5"><div class="node-circle">5</div><div class="node-label">Price</div></div>
+         </div>
+         <p class="est-timer">Estimated time remaining: 12s</p>
+       </div>
+    </div>
+
+    <div id="setup-content">
+       <div class="page-header">
+         <div>
+           <h1 class="page-title">New Analysis</h1>
+           <p class="page-sub">Choose your input method to begin the monetization pipeline.</p>
+         </div>
+       </div>
+
+       <div class="onboarding-grid">
+         <!-- Source Choice Card -->
+         <div class="surface-card onboarding-card">
+           <div class="card-title">1. Choose Your Source</div>
+           <div class="source-options">
+             <div class="source-option active" onclick="selectSource('youtube')">
+               <div class="source-icon">📺</div>
+               <div class="source-info">
+                 <div class="source-name">YouTube Link</div>
+                 <div class="source-desc">Auto-fetch transcript</div>
+               </div>
+             </div>
+             <div class="source-option" onclick="selectSource('paste')">
+               <div class="source-icon">✍️</div>
+               <div class="source-info">
+                 <div class="source-name">Paste Text</div>
+                 <div class="source-desc">Manual transcript</div>
+               </div>
+             </div>
+             <div class="source-option" onclick="selectSource('upload')">
+               <div class="source-icon">📤</div>
+               <div class="source-info">
+                 <div class="source-name">Audio File</div>
+                 <div class="source-desc">Upload MP3/WAV</div>
+               </div>
+             </div>
+           </div>
+
+           <!-- Source Inputs -->
+           <div id="input-youtube" class="source-input-area">
+             <label class="field-label">Paste YouTube URL</label>
+             <div class="input-with-btn">
+               <input type="text" id="f-yt-url" class="input" placeholder="https://youtube.com/watch?v=..." />
+               <button class="btn-accent" onclick="fetchYTTranscript(true)">Fetch & Analyze →</button>
+             </div>
+             <p class="field-hint" style="margin-top:8px; font-size:11px; color:var(--muted)">We'll automatically extract the transcript and start the pipeline.</p>
+           </div>
+
+           <div id="input-paste" class="source-input-area" style="display:none">
+             <label class="field-label">Podcast Transcript</label>
+             <textarea id="f-transcript" class="input" style="height: 150px;" placeholder="Paste your transcript here..."></textarea>
+             <div class="badge" id="wc-badge">0 words</div>
+             <button class="btn-ghost" style="margin-top:10px" onclick="loadSampleTx()">Load Sample Transcript</button>
+           </div>
+
+           <div id="input-upload" class="source-input-area" style="display:none">
+             <div class="upload-zone">
+               <div class="upload-icon">📁</div>
+               <div class="upload-text">Drag & drop your podcast file</div>
+               <div class="upload-sub">MP3, WAV, or AAC (Max 100MB)</div>
+               <button class="btn-ghost" style="margin-top:16px">Choose File</button>
+             </div>
+           </div>
+         </div>
+
+         <!-- Metadata Card -->
+         <div class="surface-card onboarding-card">
+           <div class="card-title">2. Podcast Details</div>
+           <div class="field-grid">
+             <div class="field">
+               <label class="field-label">Show Name</label>
+               <input type="text" id="f-name" class="input" value="My Podcast" />
+             </div>
+             <div class="field">
+               <label class="field-label">Niche / Category</label>
+               <select id="f-cat" class="input">
+                 <option>Business</option>
+                 <option>Tech</option>
+                 <option>True Crime</option>
+                 <option>Self Improvement</option>
+               </select>
+             </div>
+             <div class="field">
+               <label class="field-label">Avg Downloads / Ep</label>
+               <input type="number" id="f-listeners" class="input" value="10000" />
+             </div>
+             <div class="field">
+               <label class="field-label">Episodes / Month</label>
+               <input type="number" id="f-eps" class="input" value="4" />
+             </div>
+           </div>
+           
+           <div class="setup-actions" style="margin-top: 32px; border-top: 1px solid var(--border); padding-top: 24px;">
+             <button class="btn-accent large w-100" onclick="runFullPipeline()">
+               🚀 Start AI Pipeline
+             </button>
+             <p class="setup-hint">Full analysis takes ~15-20 seconds.</p>
+           </div>
+         </div>
+       </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    function selectSource(type) {
+      document.querySelectorAll('.source-option').forEach(opt => opt.classList.remove('active'));
+      document.querySelectorAll('.source-input-area').forEach(area => area.style.display = 'none');
+      
+      const activeOpt = [...document.querySelectorAll('.source-option')].find(o => o.innerText.toLowerCase().includes(type));
+      if (activeOpt) activeOpt.classList.add('active');
+      
+      document.getElementById('input-' + type).style.display = 'block';
+    }
+
+    // Fix redirection for the analysis finish
+    function showScreen(name) {
+      if (name === 'analysis') {
+        document.getElementById('setup-content').style.display = 'none';
+        document.getElementById('screen-analysis').style.display = 'block';
+      } else if (name === 'dashboard') {
+        window.location.href = 'app.html';
+      }
+    }
+  </script>
+</body>
+</html>

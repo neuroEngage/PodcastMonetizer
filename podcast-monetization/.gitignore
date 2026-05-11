@@ -1,0 +1,11 @@
+node_modules/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+dist/
+build/
+temp_docx_extract/
+backend_test.json
+scratch_yt.py
+*.docx

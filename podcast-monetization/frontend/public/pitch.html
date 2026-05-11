@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pitch Builder — PodMonetize AI</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <span class="logo-icon">🎙</span>
+        <div class="logo-info"><div class="logo-name">PodMonetize</div><div class="logo-sub">v2.0 Command Center</div></div>
+      </div>
+      <div class="podcast-switcher" id="podcast-name-display">My Podcast</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="app.html" class="nav-link"><span class="nav-icon">📊</span> <span class="nav-text">Dashboard</span></a>
+      <a href="sponsors.html" class="nav-link"><span class="nav-icon">🎯</span> <span class="nav-text">Sponsor Finder</span></a>
+      <a href="pitch.html" class="nav-link active"><span class="nav-icon">✉️</span> <span class="nav-text">Pitch Builder</span></a>
+      <a href="placement.html" class="nav-link"><span class="nav-icon">📍</span> <span class="nav-text">Ad Placement</span></a>
+      <a href="pricing.html" class="nav-link"><span class="nav-icon">💰</span> <span class="nav-text">Pricing Tool</span></a>
+      <div class="nav-divider"></div>
+      <a href="setup.html" class="nav-link"><span class="nav-icon">⚙️</span> <span class="nav-text">Setup</span></a>
+    </nav>
+  </aside>
+
+  <main class="main" id="main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Pitch Builder</h1>
+        <p class="page-sub">Generate tailored outreach emails using AI personas.</p>
+      </div>
+    </div>
+
+    <div id="pitch-empty" class="surface-card empty-state" style="padding:40px">
+      <div class="empty-icon">✉️</div>
+      <div class="empty-text">Draft Your First Pitch</div>
+      <div class="empty-sub">Generate a pitch automatically or create a manual configuration.</div>
+      <button class="btn-accent" onclick="showManualPitchForm()">Create Manual Configuration</button>
+    </div>
+
+    <div id="manual-pitch-form" class="surface-card" style="display:none; max-width: 600px; margin: 0 auto;">
+       <div class="card-title">Manual Pitch Configuration</div>
+       <div class="field">
+         <label class="field-label">Target Sponsor Name</label>
+         <input type="text" id="m-sponsor-name" class="input" placeholder="e.g. Shopify" />
+       </div>
+       <div class="field">
+         <label class="field-label">The "Hook" (Why they should sponsor you)</label>
+         <textarea id="m-hook" class="input" style="height: 80px;" placeholder="e.g. My audience is 40% small business owners."></textarea>
+       </div>
+       <button class="btn-accent large" onclick="generateManualPitch()">Generate AI Pitch →</button>
+    </div>
+
+    <div id="pitch-builder" style="display:none">
+       <div class="pricing-strip">
+         <div class="price-item"><div class="price-label">Sponsor</div><div class="price-val" id="pb-sponsor">—</div></div>
+         <div class="price-sep"></div>
+         <div class="price-item"><div class="price-label">Recommended Rate</div><div class="price-val accent" id="pb-rate">—</div></div>
+       </div>
+       <div class="surface-card">
+         <div class="card-title">Email Body</div>
+         <div class="pitch-body" id="pb-body">Generating...</div>
+         <button class="btn-ghost" style="margin-top:20px" onclick="copyEl('pb-body')">📋 Copy Email</button>
+       </div>
+    </div>
+    <div id="pitch-loading" class="pitch-loading-overlay" style="display:none">
+      <div class="loading-orb"></div><span>Generating high-intent pitch...</span>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      // Logic for pitch page
+    });
+  </script>
+</body>
+</html>

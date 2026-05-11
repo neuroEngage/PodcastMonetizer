@@ -5,7 +5,7 @@ Run: python server.py
 """
 
 import os, time, json
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -453,6 +453,44 @@ def health(request: Request):
         "session_usage": session_usage,
     }
 
+
+# ── Editor RPC Bridge (WebSocket) ─────────────────────────────────────────────
+class EditorConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+        print(f"[EditorBridge] Client connected. Total: {len(self.active_connections)}")
+
+    def disconnect(self, websocket: WebSocket):
+        if websocket in self.active_connections:
+            self.active_connections.remove(websocket)
+            print(f"[EditorBridge] Client disconnected.")
+
+    async def broadcast(self, message: dict):
+        for connection in self.active_connections:
+            await connection.send_json(message)
+
+manager = EditorConnectionManager()
+
+@app.websocket("/ws/editor")
+async def websocket_editor_endpoint(websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        while True:
+            data = await websocket.receive_json()
+            # Handle incoming commands from Frontend
+            # Example: {"command": "openAt", "params": {"file": "transcript.txt", "line": 10}}
+            print(f"[EditorBridge] Command received: {data}")
+            # In a real editor extension context, this would relay to the VS Code plugin
+            await websocket.send_json({"status": "received", "command": data.get("command")})
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+    except Exception as e:
+        print(f"[EditorBridge] Error: {e}")
+        manager.disconnect(websocket)
 
 if __name__ == "__main__":
     import uvicorn
